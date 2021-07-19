@@ -1,0 +1,4 @@
+name: yt.lost.main.KBingo
+version: ${project.version}
+main: yt.lost.main.KBingo
+api-version: 1.16
