@@ -8,6 +8,6 @@ open class Events: Listener {
 
     @EventHandler
     fun onPlayerJoin(event: PlayerJoinEvent){
-        event.joinMessage = event.player.name+" ist Bingo gejoined"
+        event.joinMessage = "§9§lBingo §r§7| §8"+event.player.name+" ist Bingo gejoined"
     }
 }

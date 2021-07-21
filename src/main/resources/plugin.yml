@@ -1,4 +1,9 @@
-name: yt.lost.main.KBingo
+name: KBingo
 version: ${project.version}
 main: yt.lost.main.KBingo
 api-version: 1.16
+commands:
+  start:
+    description: starts Bingo
+  stopgame:
+    description: stops the game
