@@ -1,18 +1,12 @@
-package yt.lost.main
+package yt.lost.main.entities
 
 import org.bukkit.entity.Player
-import org.bukkit.scoreboard.Team
 
-class BingoPlayer {
+class BingoPlayer (private var player: Player){
 
     private var kills:Int = 0
     private var itemsCollected:Int = 0
-    private var team: Team? = null
-    private var player: Player? = null
-
-    constructor(player: Player){
-        this.player = player
-    }
+    private var team: BingoTeam? = null
 
     fun onKill(){
         this.kills += 1
@@ -22,7 +16,7 @@ class BingoPlayer {
         this.itemsCollected += 1
     }
 
-    fun setTeam(team: Team){
+    fun setTeam(team: BingoTeam){
         this.team = team
     }
 
@@ -33,6 +27,5 @@ class BingoPlayer {
     fun getItemsCollected():Int{
         return this.itemsCollected
     }
-
 
 }

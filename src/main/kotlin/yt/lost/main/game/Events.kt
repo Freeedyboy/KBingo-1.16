@@ -1,4 +1,4 @@
-package yt.lost.main
+package yt.lost.main.game
 
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
