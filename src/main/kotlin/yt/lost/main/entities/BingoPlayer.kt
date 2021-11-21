@@ -20,6 +20,10 @@ class BingoPlayer (private var player: Player){
         this.team = team
     }
 
+    fun getTeam(): BingoTeam?{
+        return team
+    }
+
     fun getKills():Int{
         return this.kills
     }

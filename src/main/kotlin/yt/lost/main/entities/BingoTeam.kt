@@ -1,23 +1,31 @@
 package yt.lost.main.entities
 
-import com.sun.org.apache.xpath.internal.operations.Bool
 import org.bukkit.Bukkit
+import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryType
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import java.util.*
 
-class BingoTeam (private var name: String, private var amount: Int, private var leader: Player) {
+class BingoTeam (private var name: String, private var leader: Player) {
 
     private var itemsToGet: LinkedList<ItemStack> = LinkedList()
     private val member: LinkedList<Player> = LinkedList()
     private var backpack: Inventory = Bukkit.createInventory(null, InventoryType.BARREL, "Backpack $name")
 
-    fun onItemCollect(item: ItemStack) {
+    fun onItemCollect(item: ItemStack) : Boolean{
         if(itemsToGet.contains(item)){
-
+            var c = 0
+            for(currentItem in itemsToGet){
+                if(currentItem == item){
+                    itemsToGet.set(c, ItemStack(Material.GRAY_STAINED_GLASS))
+                    return true
+                }
+                c += 1
+            }
         }
+        return false
     }
 
     fun setItemsToGet(list: LinkedList<ItemStack>) {

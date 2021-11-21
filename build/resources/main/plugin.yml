@@ -7,3 +7,5 @@ commands:
     description: starts Bingo
   stopgame:
     description: stops the game
+  createteam:
+    description: creates a new team

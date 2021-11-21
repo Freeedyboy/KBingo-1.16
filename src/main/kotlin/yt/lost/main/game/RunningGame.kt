@@ -5,12 +5,20 @@ import org.bukkit.Bukkit
 import org.bukkit.plugin.Plugin
 import org.bukkit.scheduler.BukkitRunnable
 import net.md_5.bungee.api.chat.*
+import org.bukkit.entity.Player
+import yt.lost.main.Items
+import yt.lost.main.entities.BingoPlayer
+import yt.lost.main.entities.BingoTeam
+import java.util.*
+import kotlin.collections.HashMap
 
-class RunningGame {
+class RunningGame(private val plugin: Plugin) {
 
     var time: Int = 0
-    var plugin: Plugin? = null
+
     var running: Boolean = false
+    val players: HashMap<Player, BingoPlayer> = HashMap()
+    private val teams: LinkedList<BingoTeam> = LinkedList()
 
     val runnable : BukkitRunnable = object : BukkitRunnable(){
         override fun run() {
@@ -21,17 +29,47 @@ class RunningGame {
         }
     }
 
-    constructor(plugin: Plugin){
-        this.plugin = plugin
+    fun addPlayer(player: Player){
+        players.put(player, BingoPlayer(player))
+    }
+
+    fun getPlayer(player: Player): BingoPlayer?{
+        return players.get(player)
     }
 
     fun startGame(){
-        runnable.runTaskTimer(this.plugin!!, 1, 20)
+        runnable.runTaskTimer(this.plugin, 1, 20)
         running = true
+
+        val items: Items = Items()
+        items.mixItems()
+
+        for(team in teams){
+            team.setItemsToGet(items.items)
+        }
+
+        for(item in items.items){
+            Bukkit.broadcastMessage(item.toString())
+        }
 
         for(player in Bukkit.getOnlinePlayers()){
             player.teleport(Bukkit.getWorld("world")!!.spawnLocation)
             player.sendTitle("Bingo", "wurde gestartet", 1, 30, 1)
+        }
+    }
+
+    fun addTeam(team: BingoTeam): Boolean{
+        return if(!teams.contains(team)){
+            teams.add(team)
+            true
+        }else{
+            false
+        }
+    }
+
+    fun removeTeam(team: BingoTeam){
+        if(teams.contains(team)){
+            teams.remove(team)
         }
     }
 
@@ -49,7 +87,7 @@ class RunningGame {
         return running
     }
 
-    private fun shortInteger(duration: Int): String? {
+    private fun shortInteger(duration: Int): String {
         var duration = duration
         var string = ""
         var hours = 0
