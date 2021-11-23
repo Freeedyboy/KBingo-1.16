@@ -11,18 +11,18 @@ class Items {
     var items: LinkedList<ItemStack> = LinkedList()
 
     fun mixItems(){
-        for(i in 0 until 9){
+        var i = 9
+        while( i > 0){
             val item = ItemStack(Material.values()[Math.round(Math.random() * Material.values().size).toInt() - 1])
             val itemname = item.type.name
             if (isBanned(itemname)) {
                 println("triggerttriggerttriggerttriggert")
             } else {
                 items.add(item)
+                i-=1
             }
         }
     }
-
-
 
     private fun isBanned(name: String): Boolean{
         try {

@@ -3,6 +3,7 @@ package yt.lost.main.game
 import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerPickupItemEvent
 
@@ -16,12 +17,23 @@ open class Events(private val game: RunningGame): Listener {
 
     @EventHandler
     fun onItemCollect(event: PlayerPickupItemEvent){
+        Bukkit.broadcastMessage(event.item.itemStack.toString())
         if(game.running){
-            Bukkit.broadcastMessage("HIHIHI")
-            if(game.getPlayer(event.player)?.getTeam()?.onItemCollect(event.item.itemStack)!!){
-                Bukkit.broadcastMessage(event.player.name+" hat ein Item aufgesammelt")
+            if(game.getPlayer(event.player)?.getTeam()?.onItemCollect(event.player,event.item.itemStack) == true){
+                Bukkit.broadcastMessage("§9${event.player.name} hat §8${event.item.itemStack.type.name} aufgesammelt")
             }
-        }else
-            Bukkit.broadcastMessage("HURENSOHN")
+            if(game.getPlayer(event.player)?.getTeam()?.isWon() == true){
+                game.finishGame(game.getPlayer(event.player)?.getTeam()!!)
+            }
+        }
+    }
+
+    @EventHandler
+    fun onInventoryClick(event: InventoryClickEvent){
+        for(team in game.teams){
+            if(event.inventory == team.inventory){
+                event.isCancelled = true
+            }
+        }
     }
 }

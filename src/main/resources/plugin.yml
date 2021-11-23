@@ -9,3 +9,9 @@ commands:
     description: stops the game
   createteam:
     description: creates a new team
+    aliases: [ct]
+  bingo:
+    description: see all the items you have to get
+  backpack:
+    description: see the backpack of your team
+    aliases: [bp]

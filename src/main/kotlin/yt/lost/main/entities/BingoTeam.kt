@@ -1,5 +1,6 @@
 package yt.lost.main.entities
 
+import CreateItemCommand.createGuiItem
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -8,40 +9,58 @@ import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import java.util.*
 
-class BingoTeam (private var name: String, private var leader: Player) {
 
-    private var itemsToGet: LinkedList<ItemStack> = LinkedList()
+class BingoTeam (var name: String, var leader: Player) {
+
+    var itemsToGet: LinkedList<ItemStack>? = null
     private val member: LinkedList<Player> = LinkedList()
-    private var backpack: Inventory = Bukkit.createInventory(null, InventoryType.BARREL, "Backpack $name")
+    var backpack: Inventory = Bukkit.createInventory(null, InventoryType.BARREL, "Backpack $name")
+    var inventory: Inventory = Bukkit.createInventory(null, 9, "Items $name:")
 
-    fun onItemCollect(item: ItemStack) : Boolean{
-        if(itemsToGet.contains(item)){
-            var c = 0
-            for(currentItem in itemsToGet){
-                if(currentItem == item){
-                    itemsToGet.set(c, ItemStack(Material.GRAY_STAINED_GLASS))
-                    return true
-                }
-                c += 1
+    init{
+        member.add(leader)
+        itemsToGet = LinkedList()
+    }
+
+    fun onItemCollect(player: Player, item: ItemStack) : Boolean{
+        if(!member.contains(player)) {
+            return false
+        }
+        var c = 0
+        for(currentItem in this.itemsToGet!!){
+            if(currentItem.type == item.type){
+                val array= itemsToGet!!.toTypedArray()
+                array[c] = createGuiItem(Material.GREEN_STAINED_GLASS_PANE, "§9${currentItem.type.name} §ageschafft!", "§7Dieses Item musst du nun nicht mehr sammeln")
+                itemsToGet = LinkedList(array.asList())
+                reloadItems()
+                return true
             }
+            c += 1
         }
         return false
     }
 
-    fun setItemsToGet(list: LinkedList<ItemStack>) {
+    private fun reloadItems(){
+        var i = 0
+        for(items in itemsToGet!!){
+            inventory.setItem(i, items)
+            i+=1
+        }
+    }
+
+    fun isWon(): Boolean{
+        for(item in itemsToGet!!){
+            if(item.type != Material.GRAY_STAINED_GLASS){
+                return false
+            }
+        }
+        return true
+    }
+
+    fun setItemsToGeta(list: LinkedList<ItemStack>) {
         this.itemsToGet = list
-    }
-
-    fun setLeader(player: Player){
-        this.leader = player
-    }
-
-    fun changeName(player: Player, name: String): Boolean{
-        return if(player == leader){
-            this.name = name
-            true
-        }else{
-            false
+        for(item in itemsToGet!!){
+            inventory.addItem(item)
         }
     }
 
@@ -61,15 +80,5 @@ class BingoTeam (private var name: String, private var leader: Player) {
             member.add(player)
             true
         }
-    }
-
-    fun getItems() : Inventory{
-        val inventory: Inventory = Bukkit.createInventory(null, InventoryType.BARREL, "Items: $name")
-
-        for(item in itemsToGet){
-            inventory.addItem(item)
-        }
-
-        return inventory
     }
 }

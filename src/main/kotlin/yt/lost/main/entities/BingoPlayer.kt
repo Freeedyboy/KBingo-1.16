@@ -12,6 +12,10 @@ class BingoPlayer (private var player: Player){
         this.kills += 1
     }
 
+    fun hasTeam(): Boolean{
+        return team != null
+    }
+
     fun onItemCollected(){
         this.itemsCollected += 1
     }

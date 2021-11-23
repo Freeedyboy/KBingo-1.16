@@ -5,6 +5,7 @@ import org.bukkit.Bukkit
 import org.bukkit.plugin.Plugin
 import org.bukkit.scheduler.BukkitRunnable
 import net.md_5.bungee.api.chat.*
+import org.bukkit.Sound
 import org.bukkit.entity.Player
 import yt.lost.main.Items
 import yt.lost.main.entities.BingoPlayer
@@ -14,11 +15,11 @@ import kotlin.collections.HashMap
 
 class RunningGame(private val plugin: Plugin) {
 
-    var time: Int = 0
+    private var time: Int = 0
 
     var running: Boolean = false
     val players: HashMap<Player, BingoPlayer> = HashMap()
-    private val teams: LinkedList<BingoTeam> = LinkedList()
+    val teams: LinkedList<BingoTeam> = LinkedList()
 
     val runnable : BukkitRunnable = object : BukkitRunnable(){
         override fun run() {
@@ -29,8 +30,10 @@ class RunningGame(private val plugin: Plugin) {
         }
     }
 
-    fun addPlayer(player: Player){
-        players.put(player, BingoPlayer(player))
+    fun addPlayer(player: Player): BingoPlayer{
+        val p = BingoPlayer(player)
+        players.put(player, p)
+        return p
     }
 
     fun getPlayer(player: Player): BingoPlayer?{
@@ -45,7 +48,8 @@ class RunningGame(private val plugin: Plugin) {
         items.mixItems()
 
         for(team in teams){
-            team.setItemsToGet(items.items)
+            team.setItemsToGeta(items.items)
+            Bukkit.broadcastMessage(team.name)
         }
 
         for(item in items.items){
@@ -55,6 +59,18 @@ class RunningGame(private val plugin: Plugin) {
         for(player in Bukkit.getOnlinePlayers()){
             player.teleport(Bukkit.getWorld("world")!!.spawnLocation)
             player.sendTitle("Bingo", "wurde gestartet", 1, 30, 1)
+        }
+    }
+
+    fun finishGame(team: BingoTeam){
+        if(running){
+            runnable.cancel()
+            running = false
+            for(player in Bukkit.getOnlinePlayers()){
+                player.sendTitle("Bingo", "wurde von ${team.name} beendet", 1, 40, 1)
+                player.teleport(team.leader.location)
+                player.playSound(team.leader.location, Sound.ENTITY_PLAYER_LEVELUP, 5f, 5f)
+            }
         }
     }
 

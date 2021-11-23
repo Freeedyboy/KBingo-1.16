@@ -3,6 +3,7 @@ package yt.lost.main
 import org.bukkit.plugin.java.JavaPlugin
 import yt.lost.main.commands.CreateTeamCommand
 import yt.lost.main.commands.StartStopCommand
+import yt.lost.main.commands.TeamCommands
 import yt.lost.main.entities.BingoPlayer
 import yt.lost.main.entities.BingoTeam
 import yt.lost.main.game.Events
@@ -14,19 +15,20 @@ class KBingo : JavaPlugin(){
     var runningGame: RunningGame = RunningGame(this)
     var startStopCommand: StartStopCommand? = null
     private val teams: LinkedList<BingoTeam> = LinkedList()
-    private var players: LinkedList<BingoPlayer> = LinkedList()
-    private val instance = this
-
+    private var teamCommands: TeamCommands? = null
 
 
     override fun onEnable() {
         startStopCommand = StartStopCommand(runningGame)
+        teamCommands = TeamCommands(runningGame)
 
         this.server.pluginManager.registerEvents(Events(runningGame), this)
 
         this.getCommand("start")?.setExecutor(startStopCommand)
         this.getCommand("stopgame")?.setExecutor(startStopCommand)
-        this.getCommand("createteam")?.setExecutor(CreateTeamCommand(this))
+        this.getCommand("createteam")?.setExecutor(CreateTeamCommand(this, runningGame))
+        this.getCommand("backpack")?.setExecutor(teamCommands)
+        this.getCommand("bingo")?.setExecutor(teamCommands)
 
     }
 
