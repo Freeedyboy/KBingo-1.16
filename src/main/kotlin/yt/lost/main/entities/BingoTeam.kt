@@ -12,14 +12,13 @@ import java.util.*
 
 class BingoTeam (var name: String, var leader: Player) {
 
-    var itemsToGet: LinkedList<ItemStack>? = null
+    var itemsToGet: LinkedList<ItemStack> = LinkedList()
     private val member: LinkedList<Player> = LinkedList()
     var backpack: Inventory = Bukkit.createInventory(null, InventoryType.BARREL, "Backpack $name")
     var inventory: Inventory = Bukkit.createInventory(null, 9, "Items $name:")
 
     init{
         member.add(leader)
-        itemsToGet = LinkedList()
     }
 
     fun onItemCollect(player: Player, item: ItemStack) : Boolean{
@@ -27,9 +26,9 @@ class BingoTeam (var name: String, var leader: Player) {
             return false
         }
         var c = 0
-        for(currentItem in this.itemsToGet!!){
+        for(currentItem in this.itemsToGet){
             if(currentItem.type == item.type){
-                val array= itemsToGet!!.toTypedArray()
+                val array= itemsToGet.toTypedArray()
                 array[c] = createGuiItem(Material.GREEN_STAINED_GLASS_PANE, "§9${currentItem.type.name} §ageschafft!", "§7Dieses Item musst du nun nicht mehr sammeln")
                 itemsToGet = LinkedList(array.asList())
                 reloadItems()
@@ -42,16 +41,16 @@ class BingoTeam (var name: String, var leader: Player) {
 
     private fun reloadItems(){
         var i = 0
-        for(items in itemsToGet!!){
+        for(items in itemsToGet){
             inventory.setItem(i, items)
             i+=1
         }
     }
 
     fun isWon(): Boolean{
-        for(item in itemsToGet!!){
+        for(item in itemsToGet){
             if(item.type != Material.GRAY_STAINED_GLASS){
-                return false
+               return false
             }
         }
         return true
@@ -59,7 +58,7 @@ class BingoTeam (var name: String, var leader: Player) {
 
     fun setItemsToGeta(list: LinkedList<ItemStack>) {
         this.itemsToGet = list
-        for(item in itemsToGet!!){
+        for(item in itemsToGet){
             inventory.addItem(item)
         }
     }

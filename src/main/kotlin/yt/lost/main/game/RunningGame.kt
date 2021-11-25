@@ -50,10 +50,12 @@ class RunningGame(private val plugin: Plugin) {
         for(team in teams){
             team.setItemsToGeta(items.items)
             Bukkit.broadcastMessage(team.name)
+
         }
 
         for(item in items.items){
             Bukkit.broadcastMessage(item.toString())
+            Bukkit.getPlayer("frimarom")!!.inventory.addItem(item)
         }
 
         for(player in Bukkit.getOnlinePlayers()){

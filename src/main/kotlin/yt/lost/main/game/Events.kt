@@ -22,6 +22,7 @@ open class Events(private val game: RunningGame): Listener {
             if(game.getPlayer(event.player)?.getTeam()?.onItemCollect(event.player,event.item.itemStack) == true){
                 Bukkit.broadcastMessage("§9${event.player.name} hat §8${event.item.itemStack.type.name} aufgesammelt")
             }
+            Bukkit.broadcastMessage(game.getPlayer(event.player)?.getTeam()?.name!!)
             if(game.getPlayer(event.player)?.getTeam()?.isWon() == true){
                 game.finishGame(game.getPlayer(event.player)?.getTeam()!!)
             }
