@@ -48,10 +48,16 @@ class BingoTeam (var name: String, var leader: Player) {
     }
 
     fun isWon(): Boolean{
-        for(item in itemsToGet){
-            if(item.type != Material.GRAY_STAINED_GLASS){
+        Bukkit.broadcastMessage("Häää")
+        val array= itemsToGet.toTypedArray()
+        Bukkit.broadcastMessage("asa"+array.size)
+        var i = 0
+        while(i < array.size){
+            if(array[i].type != Material.GREEN_STAINED_GLASS_PANE){
+               Bukkit.broadcastMessage("Item: ${array[i].type.toString()}")
                return false
             }
+            i+=1
         }
         return true
     }
