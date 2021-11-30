@@ -12,6 +12,11 @@ open class StartStopCommand(private val runningGame: RunningGame): CommandExecut
     override fun onCommand(p0: CommandSender, p1: Command, p2: String, p3: Array<out String>): Boolean {
         var player: Player = p0 as Player
 
+        if(!player.isOp) {
+            player.sendMessage("Du hast nicht die nötigen Berechtigungen")
+            return false
+        }
+
         if(p1.name == "start"){
             if(runningGame.isRunning())
                 player.sendMessage("§9§lBingo §r§7| §c"+"Das Spiel läuft bereits")

@@ -15,3 +15,5 @@ commands:
   backpack:
     description: see the backpack of your team
     aliases: [bp]
+  join:
+    description: join

@@ -1,17 +1,17 @@
 package yt.lost.main.game
 
 import net.md_5.bungee.api.ChatMessageType
-import org.bukkit.Bukkit
-import org.bukkit.plugin.Plugin
-import org.bukkit.scheduler.BukkitRunnable
 import net.md_5.bungee.api.chat.*
+import org.bukkit.Bukkit
 import org.bukkit.Sound
 import org.bukkit.entity.Player
-import yt.lost.main.Items
+import org.bukkit.plugin.Plugin
+import org.bukkit.scheduler.BukkitRunnable
 import yt.lost.main.entities.BingoPlayer
 import yt.lost.main.entities.BingoTeam
+import java.text.Collator
 import java.util.*
-import kotlin.collections.HashMap
+
 
 class RunningGame(private val plugin: Plugin) {
 
@@ -19,13 +19,19 @@ class RunningGame(private val plugin: Plugin) {
 
     var running: Boolean = false
     val players: HashMap<Player, BingoPlayer> = HashMap()
-    val teams: LinkedList<BingoTeam> = LinkedList()
+    var teams: LinkedList<BingoTeam> = LinkedList()
+    var firstPlace: BingoTeam? = null
+    var tmp = 1000
 
     val runnable : BukkitRunnable = object : BukkitRunnable(){
         override fun run() {
             time += 1
             for(player in Bukkit.getOnlinePlayers()){
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent(shortInteger(time)))
+            }
+            setFirst()
+            for(team in teams){
+                team.reloadSB(plugin, firstPlace!!, getNext(team), team)
             }
         }
     }
@@ -34,6 +40,45 @@ class RunningGame(private val plugin: Plugin) {
         val p = BingoPlayer(player)
         players.put(player, p)
         return p
+    }
+
+    fun setFirst(){
+        for(team in teams){
+            if(team.getItemsLeft() < tmp){
+                tmp = team.getItemsLeft()
+                firstPlace = team
+            }
+        }
+    }
+
+    fun getNext(team: BingoTeam): BingoTeam{
+        sortTeams()
+        var c = 0
+        var next = team
+
+        for(tmp in teams){
+            if(tmp == team && c != 0){
+                next = teams[c-1]
+            }
+            c+=1
+        }
+
+        return next
+    }
+
+    fun sortTeams(){
+        var list: LinkedList<BingoTeam > = LinkedList()
+
+        for(i in 0 until teams.size){
+            var tmp = teams.first
+            for (team in teams){
+                if(team.getItemsLeft() < tmp.getItemsLeft()){
+                    tmp = team
+                }
+            }
+            list.add(tmp)
+        }
+        teams = list
     }
 
     fun getPlayer(player: Player): BingoPlayer?{
@@ -48,18 +93,12 @@ class RunningGame(private val plugin: Plugin) {
         items.mixItems()
 
         for(team in teams){
-            team.setItemsToGeta(items.items)
-            Bukkit.broadcastMessage(team.name)
-
+            team.setItemsToGet(items.items)
         }
 
-        for(item in items.items){
-            Bukkit.broadcastMessage(item.toString())
-            Bukkit.getPlayer("frimarom")!!.inventory.addItem(item)
-        }
+        Bukkit.getWorld("world")!!.worldBorder.reset()
 
         for(player in Bukkit.getOnlinePlayers()){
-            player.teleport(Bukkit.getWorld("world")!!.spawnLocation)
             player.sendTitle("Bingo", "wurde gestartet", 1, 30, 1)
         }
     }
@@ -70,10 +109,19 @@ class RunningGame(private val plugin: Plugin) {
             running = false
             for(player in Bukkit.getOnlinePlayers()){
                 player.sendTitle("Bingo", "wurde von ${team.name} beendet", 1, 40, 1)
-                player.teleport(team.leader.location)
-                player.playSound(team.leader.location, Sound.ENTITY_PLAYER_LEVELUP, 5f, 5f)
+                player.teleport(team.leader.getPlayer().location)
+                player.playSound(team.leader.getPlayer().location, Sound.ENTITY_PLAYER_LEVELUP, 5f, 5f)
             }
         }
+    }
+
+    fun getTeam(name: String): BingoTeam?{
+        for(team in teams){
+            if(name == team.name){
+                return team
+            }
+        }
+        return null
     }
 
     fun addTeam(team: BingoTeam): Boolean{

@@ -1,5 +1,6 @@
 package yt.lost.main
 
+import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import yt.lost.main.commands.CreateTeamCommand
 import yt.lost.main.commands.StartStopCommand
@@ -29,7 +30,8 @@ class KBingo : JavaPlugin(){
         this.getCommand("createteam")?.setExecutor(CreateTeamCommand(this, runningGame))
         this.getCommand("backpack")?.setExecutor(teamCommands)
         this.getCommand("bingo")?.setExecutor(teamCommands)
-
+        this.getCommand("join")?.setExecutor(teamCommands)
+        Bukkit.getWorld("world")!!.worldBorder.size = 20.0
     }
 
     fun addTeam(team: BingoTeam): Boolean{

@@ -17,13 +17,13 @@ open class Events(private val game: RunningGame): Listener {
     fun onPlayerJoin(event: PlayerJoinEvent){
         event.joinMessage = "§9§lBingo §r§7| §8"+event.player.name+" ist Bingo gejoined"
         game.addPlayer(event.player)
+        event.player.teleport(event.player.world.spawnLocation)
     }
 
     @EventHandler
     fun onItemCollect(event: PlayerPickupItemEvent){
-        Bukkit.broadcastMessage(event.item.itemStack.toString())
         if(game.running){
-            if(game.getPlayer(event.player)?.getTeam()?.onItemCollect(event.player,event.item.itemStack) == true){
+            if(game.getPlayer(event.player)?.getTeam()?.onItemCollect(game.getPlayer(event.player)!!,event.item.itemStack) == true){
                 Bukkit.broadcastMessage("§9${event.player.name} hat §8${event.item.itemStack.type.name} aufgesammelt")
             }
 
@@ -35,9 +35,8 @@ open class Events(private val game: RunningGame): Listener {
 
     @EventHandler
     fun inventoryChange(event: CraftItemEvent){
-
         if(game.running){
-            if(game.getPlayer(event.whoClicked as Player)?.getTeam()?.onItemCollect(event.whoClicked as Player,event.currentItem!!) == true){
+            if(game.getPlayer(event.whoClicked as Player)?.getTeam()?.onItemCollect(game.getPlayer(event.whoClicked as Player)!!,event.currentItem!!) == true){
                 Bukkit.broadcastMessage("§9${event.whoClicked.name} hat §8${event.currentItem!!.type.name} aufgesammelt")
             }
 

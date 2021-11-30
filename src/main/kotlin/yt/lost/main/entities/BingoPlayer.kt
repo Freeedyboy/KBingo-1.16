@@ -12,6 +12,18 @@ class BingoPlayer (private var player: Player){
         this.kills += 1
     }
 
+    fun getName(): String{
+        return player.name
+    }
+
+    fun getPlayer(): Player{
+        return player
+    }
+
+    fun sendMessage(text: String){
+        player.sendMessage(text)
+    }
+
     fun hasTeam(): Boolean{
         return team != null
     }
