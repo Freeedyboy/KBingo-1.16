@@ -77,6 +77,7 @@ class RunningGame(private val plugin: Plugin) {
                 }
             }
             list.add(tmp)
+            teams.remove(tmp)
         }
         teams = list
     }

@@ -24,7 +24,7 @@ open class Events(private val game: RunningGame): Listener {
     fun onItemCollect(event: PlayerPickupItemEvent){
         if(game.running){
             if(game.getPlayer(event.player)?.getTeam()?.onItemCollect(game.getPlayer(event.player)!!,event.item.itemStack) == true){
-                Bukkit.broadcastMessage("§9${event.player.name} hat §8${event.item.itemStack.type.name} aufgesammelt")
+                Bukkit.broadcastMessage("§9§lBingo §r§7| §8"+"§6${event.player.name} (${game.getPlayer(event.player)!!.getTeam()!!.name})§a hat §7${event.item.itemStack.type.name}§a aufgesammelt")
             }
 
             if(game.getPlayer(event.player)!!.getTeam()!!.isWon()){
@@ -37,7 +37,7 @@ open class Events(private val game: RunningGame): Listener {
     fun inventoryChange(event: CraftItemEvent){
         if(game.running){
             if(game.getPlayer(event.whoClicked as Player)?.getTeam()?.onItemCollect(game.getPlayer(event.whoClicked as Player)!!,event.currentItem!!) == true){
-                Bukkit.broadcastMessage("§9${event.whoClicked.name} hat §8${event.currentItem!!.type.name} aufgesammelt")
+                Bukkit.broadcastMessage("§9§lBingo §r§7| §8"+"§6${event.whoClicked.name} (${game.getPlayer(event.whoClicked as Player)!!.getTeam()!!.name})§a hat §7${event.currentItem!!.type.name}§a aufgesammelt")
             }
 
             if(game.getPlayer(event.whoClicked as Player)!!.getTeam()!!.isWon()){

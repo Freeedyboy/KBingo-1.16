@@ -24,7 +24,6 @@ class KBingo : JavaPlugin(){
         teamCommands = TeamCommands(runningGame)
 
         this.server.pluginManager.registerEvents(Events(runningGame), this)
-
         this.getCommand("start")?.setExecutor(startStopCommand)
         this.getCommand("stopgame")?.setExecutor(startStopCommand)
         this.getCommand("createteam")?.setExecutor(CreateTeamCommand(this, runningGame))

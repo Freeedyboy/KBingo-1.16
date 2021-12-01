@@ -19,7 +19,7 @@ class TeamCommands(private val runningGame: RunningGame): CommandExecutor, TabCo
                 (p0 as Player).openInventory(runningGame.getPlayer(p0 as Player)?.getTeam()?.inventory!!)
             }
         }else if(p1.name == "join"){
-            if(runningGame.teams.size < Bukkit.getOnlinePlayers().size){
+            if(runningGame.teams.size > Bukkit.getOnlinePlayers().size){
                 if(runningGame.getPlayer(p0 as Player)?.hasTeam() == false) {
                     runningGame.getTeam(p3[1])?.addMember(runningGame.getPlayer(p0 as Player)!!)
                 }else{
