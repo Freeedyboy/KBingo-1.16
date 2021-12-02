@@ -9,7 +9,6 @@ import org.bukkit.plugin.Plugin
 import org.bukkit.scheduler.BukkitRunnable
 import yt.lost.main.entities.BingoPlayer
 import yt.lost.main.entities.BingoTeam
-import java.text.Collator
 import java.util.*
 
 
@@ -52,34 +51,23 @@ class RunningGame(private val plugin: Plugin) {
     }
 
     fun getNext(team: BingoTeam): BingoTeam{
-        sortTeams()
         var c = 0
         var next = team
 
         for(tmp in teams){
-            if(tmp == team && c != 0){
-                next = teams[c-1]
+            if(tmp.getItemsLeft() < team.getItemsLeft()){
+                next = tmp
             }
-            c+=1
+        }
+        if(next == team){
+            for(tmp in teams){
+                if(tmp.getItemsLeft() == team.getItemsLeft()){
+                    next = tmp
+                }
+            }
         }
 
         return next
-    }
-
-    fun sortTeams(){
-        var list: LinkedList<BingoTeam > = LinkedList()
-
-        for(i in 0 until teams.size){
-            var tmp = teams.first
-            for (team in teams){
-                if(team.getItemsLeft() < tmp.getItemsLeft()){
-                    tmp = team
-                }
-            }
-            list.add(tmp)
-            teams.remove(tmp)
-        }
-        teams = list
     }
 
     fun getPlayer(player: Player): BingoPlayer?{
@@ -87,6 +75,7 @@ class RunningGame(private val plugin: Plugin) {
     }
 
     fun startGame(){
+
         runnable.runTaskTimer(this.plugin, 1, 20)
         running = true
 

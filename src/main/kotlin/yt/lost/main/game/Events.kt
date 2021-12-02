@@ -4,6 +4,8 @@ import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.inventory.CraftItemEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryDragEvent
@@ -29,6 +31,32 @@ open class Events(private val game: RunningGame): Listener {
 
             if(game.getPlayer(event.player)!!.getTeam()!!.isWon()){
                 game.finishGame(game.getPlayer(event.player)?.getTeam()!!)
+            }
+        }
+    }
+
+    @EventHandler
+    fun onEntityDamage(event: EntityDamageEvent){
+        if(!game.running){
+           event.isCancelled = true
+        }else{
+            event.isCancelled = false
+            if(event.entity is Player) {
+                Bukkit.broadcastMessage("§9§lBingo §r§7| §8" + "Der Spieler §9${(event.entity as Player).name} §8hat gerade §4${event.finalDamage} §8von §c${event.cause.name}§8 bekommen")
+            }
+        }
+    }
+
+    @EventHandler
+    fun onEntityDamageByEntity(event: EntityDamageByEntityEvent){
+        if(!game.running){
+            event.isCancelled = true
+        }else{
+            event.isCancelled = false
+            if(event.entity is Player) {
+                Bukkit.broadcastMessage("§9§lBingo §r§7| §8" + "Der Spieler §9${(event.entity as Player).name} §8hat gerade §4${event.finalDamage} §8von §c${(event.damager).name}§8 bekommen")
+            }else{
+                Bukkit.broadcastMessage("§9§lBingo §r§7| §8" + "Der Spieler §9${(event.entity as Player).name} §8hat gerade §4${event.finalDamage} §8von §c${event.damager.name}§8 bekommen")
             }
         }
     }
