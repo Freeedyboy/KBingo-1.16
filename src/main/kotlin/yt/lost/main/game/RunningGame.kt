@@ -75,6 +75,12 @@ class RunningGame(private val plugin: Plugin) {
     }
 
     fun startGame(){
+        for(i in 0 until 5){
+            for(player in Bukkit.getOnlinePlayers()) {
+                player.sendTitle("§9§l${5-i}","§aSekunden bis Bingo startet" , 1, 18, 1)
+            }
+            Thread.sleep(1000)
+        }
 
         runnable.runTaskTimer(this.plugin, 1, 20)
         running = true
@@ -89,7 +95,7 @@ class RunningGame(private val plugin: Plugin) {
         Bukkit.getWorld("world")!!.worldBorder.reset()
 
         for(player in Bukkit.getOnlinePlayers()){
-            player.sendTitle("Bingo", "wurde gestartet", 1, 30, 1)
+            player.sendTitle("§a§lBingo", "§awurde gestartet", 1, 40, 1)
         }
     }
 
@@ -98,9 +104,12 @@ class RunningGame(private val plugin: Plugin) {
             runnable.cancel()
             running = false
             for(player in Bukkit.getOnlinePlayers()){
-                player.sendTitle("Bingo", "wurde von ${team.name} beendet", 1, 40, 1)
+                player.sendTitle("§a§lBingo", "§awurde von §9${team.name} §agewonnen", 1, 60, 1)
                 player.teleport(team.leader.getPlayer().location)
                 player.playSound(team.leader.getPlayer().location, Sound.ENTITY_PLAYER_LEVELUP, 5f, 5f)
+            }
+            for(teamm in teams){
+                teamm.reloadSB(plugin, firstPlace!!, getNext(teamm), teamm)
             }
         }
     }

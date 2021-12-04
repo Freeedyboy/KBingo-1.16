@@ -17,3 +17,7 @@ commands:
     aliases: [bp]
   join:
     description: join
+  settings:
+    description: settings
+  top:
+    description: top
