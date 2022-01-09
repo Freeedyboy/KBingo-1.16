@@ -19,9 +19,10 @@ class TeamCommands(private val runningGame: RunningGame): CommandExecutor, TabCo
                 (p0 as Player).openInventory(runningGame.getPlayer(p0 as Player)?.getTeam()?.inventory!!)
             }
         }else if(p1.name == "join"){
-            if(runningGame.teams.size > Bukkit.getOnlinePlayers().size){
+            if(runningGame.teams.size >= 2){
                 if(runningGame.getPlayer(p0 as Player)?.hasTeam() == false) {
                     runningGame.getTeam(p3[1])?.addMember(runningGame.getPlayer(p0 as Player)!!)
+                    runningGame.getPlayer(p0 as Player)!!.setTeam(runningGame.getTeam(p3[1])!!)
                 }else{
                     (p0 as Player).sendMessage("Du bist bereits in einem Team. Verlasse dieses zuerst")
                 }
