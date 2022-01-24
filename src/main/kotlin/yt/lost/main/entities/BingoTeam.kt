@@ -29,13 +29,13 @@ class BingoTeam (var name: String, var leader: BingoPlayer) {
 
         objective.displaySlot = DisplaySlot.SIDEBAR
         objective.getScore("§f").score = 10
-        objective.getScore("1. Team: ").score = 9
+        objective.getScore("§91. Team: ").score = 9
 
         objective.getScore("§1").score = 7
-        objective.getScore("Nächstes Team: ").score = 6
+        objective.getScore("§9Nächstes Team: ").score = 6
 
         objective.getScore("§3").score = 4
-        objective.getScore("Dein Team: ").score = 3
+        objective.getScore("§9Dein Team: ").score = 3
 
         objective.getScore("§a").score = 1
         objective.getScore("§3§olost.yt").score = 0
@@ -71,20 +71,20 @@ class BingoTeam (var name: String, var leader: BingoPlayer) {
     fun reloadSB(plugin: Plugin, first: BingoTeam, next: BingoTeam, your: BingoTeam){
         object : BukkitRunnable(){
             override fun run() {
-                scoreboard.getTeam("first")!!.prefix = "§a ${first.name} (${first.getItemsLeft()})"
+                scoreboard.getTeam("first")!!.prefix = "§a §7${first.name} §8(${first.getItemsLeft()})"
             }
         }.runTaskLater(plugin, 1)
 
 
         object : BukkitRunnable(){
             override fun run() {
-                scoreboard.getTeam("next")!!.prefix = "§a ${next.name} (${next.getItemsLeft()})"
+                scoreboard.getTeam("next")!!.prefix = "§a §7${next.name} §8(${next.getItemsLeft()})"
             }
         }.runTaskLater(plugin, 1)
 
         object : BukkitRunnable(){
             override fun run() {
-                scoreboard.getTeam("your")!!.prefix = "§a ${your.name} (${your.getItemsLeft()})"
+                scoreboard.getTeam("your")!!.prefix = "§a §7${your.name} §8(${your.getItemsLeft()})"
             }
         }.runTaskLater(plugin, 1)
     }
