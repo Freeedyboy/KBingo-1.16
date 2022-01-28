@@ -32,7 +32,7 @@ class BingoPlayer (private var player: Player){
         this.itemsCollected += 1
     }
 
-    fun setTeam(team: BingoTeam){
+    fun setTeam(team: BingoTeam?){
         this.team = team
     }
 

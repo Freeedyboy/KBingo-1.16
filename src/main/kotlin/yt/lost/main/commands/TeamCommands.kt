@@ -21,13 +21,20 @@ class TeamCommands(private val runningGame: RunningGame): CommandExecutor, TabCo
         }else if(p1.name == "join"){
             if(runningGame.teams.size >= 2){
                 if(runningGame.getPlayer(p0 as Player)?.hasTeam() == false) {
-                    runningGame.getTeam(p3[1])?.addMember(runningGame.getPlayer(p0 as Player)!!)
-                    runningGame.getPlayer(p0 as Player)!!.setTeam(runningGame.getTeam(p3[1])!!)
+                    runningGame.getTeam(p3[0])?.addMember(runningGame.getPlayer(p0 as Player)!!)
+                    runningGame.getPlayer(p0 as Player)!!.setTeam(runningGame.getTeam(p3[0])!!)
+                    p0.sendMessage("Erfolgreich dem Team beigetreten")
                 }else{
                     (p0 as Player).sendMessage("Du bist bereits in einem Team. Verlasse dieses zuerst")
                 }
             }else{
                 p0.sendMessage("Es gibt zu wenig Teams")
+            }
+        }else if(p1.name == "leaveteam"){
+            if(runningGame.getPlayer(p0 as Player)?.hasTeam() == false) {
+                runningGame.getTeam(p3[0])?.removeMember(runningGame.getPlayer(p0 as Player)!!)
+                runningGame.getPlayer(p0 as Player)!!.setTeam(null)
+                p0.sendMessage("erfolgreich das Team verlassen")
             }
         }
 

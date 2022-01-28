@@ -33,6 +33,7 @@ class KBingo : JavaPlugin(){
         this.getCommand("top")?.setExecutor(TopCommand())
         Bukkit.getWorld("world")!!.worldBorder.size = 20.0
 
+        this.getCommand("leaveteam")?.setExecutor(teamCommands)
         this.getCommand("settings")?.setExecutor(SettingsCommand(settings, runningGame))
         this.server.pluginManager.registerEvents(settings, this)
     }
