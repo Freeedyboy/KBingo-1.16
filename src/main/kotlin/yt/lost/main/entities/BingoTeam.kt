@@ -4,41 +4,49 @@ import CreateItemCommand.createGuiItem
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Material
-import org.bukkit.entity.Player
+import org.bukkit.OfflinePlayer
 import org.bukkit.event.inventory.InventoryType
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.Plugin
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scoreboard.DisplaySlot
+import org.bukkit.scoreboard.Objective
+import org.bukkit.scoreboard.Scoreboard
+import org.bukkit.scoreboard.Team
 import java.util.*
 
 
 class BingoTeam (var name: String, var leader: BingoPlayer) {
 
-    private var itemsToGet: LinkedList<ItemStack> = LinkedList()
     private val member: LinkedList<BingoPlayer> = LinkedList()
+
+    private var itemsToGet: LinkedList<ItemStack> = LinkedList()
     var backpack: Inventory = Bukkit.createInventory(null, InventoryType.BARREL, "Backpack $name")
     var inventory: Inventory = Bukkit.createInventory(null, 9, "Items $name:")
-    private var scoreboard = Bukkit.getScoreboardManager()!!.newScoreboard
-    private var objective = scoreboard.registerNewObjective("Main2", "Main2", "§2§lBingo")
+
+    private var rightScoreboard = Bukkit.getScoreboardManager()!!.newScoreboard
+    private var rightObjective = rightScoreboard.registerNewObjective("Main2", "Main2", "§2§lBingo")
+    var team: Team = rightScoreboard.registerNewTeam(name)
 
     init{
         member.add(leader)
-        leader.getPlayer().scoreboard = scoreboard
+        leader.getPlayer().scoreboard = rightScoreboard
 
-        objective.displaySlot = DisplaySlot.SIDEBAR
-        objective.getScore("§f").score = 10
-        objective.getScore("§91. Team: ").score = 9
+        rightObjective.displaySlot = DisplaySlot.SIDEBAR
+        rightObjective.getScore("§f").score = 10
+        rightObjective.getScore("§91. Team: ").score = 9
 
-        objective.getScore("§1").score = 7
-        objective.getScore("§9Nächstes Team: ").score = 6
+        rightObjective.getScore("§1").score = 7
+        rightObjective.getScore("§9Nächstes Team: ").score = 6
 
-        objective.getScore("§3").score = 4
-        objective.getScore("§9Dein Team: ").score = 3
+        rightObjective.getScore("§3").score = 4
+        rightObjective.getScore("§9Dein Team: ").score = 3
 
-        objective.getScore("§a").score = 1
-        objective.getScore("§3§olost.yt").score = 0
+        rightObjective.getScore("§a").score = 1
+        rightObjective.getScore("§3§olost.yt").score = 0
+
+        team.prefix = "§7[§f$name§7]§f"
         /*
         * Bingo
         *10
@@ -53,38 +61,38 @@ class BingoTeam (var name: String, var leader: BingoPlayer) {
         *1
         *0 lost.yt
         */
-        val firstPlace = scoreboard.registerNewTeam("first")
+        val firstPlace = rightScoreboard.registerNewTeam("first")
         firstPlace.addEntry(ChatColor.BLUE.toString() + "" + ChatColor.RED)
-        objective.getScore(ChatColor.BLUE.toString() + "" + ChatColor.RED).score = 8
+        rightObjective.getScore(ChatColor.BLUE.toString() + "" + ChatColor.RED).score = 8
 
 
-        val nextTeam = scoreboard.registerNewTeam("next")
+        val nextTeam = rightScoreboard.registerNewTeam("next")
         nextTeam.addEntry(ChatColor.BLACK.toString() + "" + ChatColor.RED)
-        objective.getScore(ChatColor.BLACK.toString() + "" + ChatColor.RED).score = 5
+        rightObjective.getScore(ChatColor.BLACK.toString() + "" + ChatColor.RED).score = 5
 
 
-        val yourTeam = scoreboard.registerNewTeam("your")
+        val yourTeam = rightScoreboard.registerNewTeam("your")
         yourTeam.addEntry(ChatColor.AQUA.toString() + "" + ChatColor.RED)
-        objective.getScore(ChatColor.AQUA.toString() + "" + ChatColor.RED).score = 2
+        rightObjective.getScore(ChatColor.AQUA.toString() + "" + ChatColor.RED).score = 2
     }
 
     fun reloadSB(plugin: Plugin, first: BingoTeam, next: BingoTeam, your: BingoTeam){
         object : BukkitRunnable(){
             override fun run() {
-                scoreboard.getTeam("first")!!.prefix = "§a §7${first.name} §8(${first.getItemsLeft()})"
+                rightScoreboard.getTeam("first")!!.prefix = "§a §7${first.name} §8(${first.getItemsLeft()})"
             }
         }.runTaskLater(plugin, 1)
 
 
         object : BukkitRunnable(){
             override fun run() {
-                scoreboard.getTeam("next")!!.prefix = "§a §7${next.name} §8(${next.getItemsLeft()})"
+                rightScoreboard.getTeam("next")!!.prefix = "§a §7${next.name} §8(${next.getItemsLeft()})"
             }
         }.runTaskLater(plugin, 1)
 
         object : BukkitRunnable(){
             override fun run() {
-                scoreboard.getTeam("your")!!.prefix = "§a §7${your.name} §8(${your.getItemsLeft()})"
+                rightScoreboard.getTeam("your")!!.prefix = "§a §7${your.name} §8(${your.getItemsLeft()})"
             }
         }.runTaskLater(plugin, 1)
     }
@@ -159,7 +167,8 @@ class BingoTeam (var name: String, var leader: BingoPlayer) {
             false
         else{
             member.add(player)
-            player.getPlayer().scoreboard = scoreboard
+            team.addPlayer(player.getPlayer())
+            player.getPlayer().scoreboard = rightScoreboard
             for(m in member){
                 m.sendMessage("Der Spieler ${player.getName()} ist eurem Team beigetreten")
             }

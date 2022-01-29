@@ -2,19 +2,24 @@ package yt.lost.main.game
 
 import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.*
+import net.minecraft.server.v1_16_R3.*
 import org.bukkit.Bukkit
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.plugin.Plugin
 import org.bukkit.scheduler.BukkitRunnable
+import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer
 import yt.lost.main.entities.BingoPlayer
 import yt.lost.main.entities.BingoTeam
+import java.sql.SQLException
 import java.util.*
 
 
 class RunningGame(private val plugin: Plugin) {
 
     private var time: Int = 0
+
+    var globalScoreboard: Scoreboard = Scoreboard()
 
     var running: Boolean = false
     val players: HashMap<Player, BingoPlayer> = HashMap()
@@ -126,6 +131,12 @@ class RunningGame(private val plugin: Plugin) {
     fun addTeam(team: BingoTeam): Boolean{
         return if(!teams.contains(team)){
             teams.add(team)
+
+            val tmp = globalScoreboard.createTeam(team.name)
+            tmp.prefix = ChatComponentText(team.team.prefix)
+            tmp.color = EnumChatFormat.WHITE
+            updateSB()
+
             true
         }else{
             false
@@ -150,6 +161,30 @@ class RunningGame(private val plugin: Plugin) {
 
     fun isRunning(): Boolean{
         return running
+    }
+
+    private fun updateSB(){
+        for (player in Bukkit.getOnlinePlayers()) {
+            try {
+                println("\n")
+                println("Spieler: "+getPlayer(player))
+                println("Team: "+getPlayer(player)?.getTeam())
+                println("Gleicher Name: "+getPlayer(player)?.getTeam()?.name)
+                println("PREFIX: "+globalScoreboard.getTeam(getPlayer(player)?.getTeam()?.name).prefix.text)
+
+                sendPacket(PacketPlayOutScoreboardTeam(globalScoreboard.getTeam(getPlayer(player)?.getTeam()?.name), 1))
+                sendPacket(PacketPlayOutScoreboardTeam(globalScoreboard.getTeam(getPlayer(player)?.getTeam()?.name), 0))
+            }catch (e: NullPointerException){
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun sendPacket(packet: Packet<*>) {
+        for (onlinePlayer in Bukkit.getOnlinePlayers()) {
+            val p = onlinePlayer as CraftPlayer
+            p.handle.playerConnection.sendPacket(packet)
+        }
     }
 
     private fun shortInteger(duration: Int): String {

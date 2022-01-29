@@ -15,7 +15,7 @@ class Items {
         while( i > 0){
             val item = ItemStack(Material.values()[Math.round(Math.random() * Material.values().size).toInt() - 1])
             val itemname = item.type.name
-            if (isBanned(itemname)) {
+            if (isBanned(itemname) || this.items.contains(item)) {
                 println("triggerttriggerttriggerttriggert")
             } else {
                 items.add(item)
