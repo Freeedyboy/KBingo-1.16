@@ -47,20 +47,7 @@ class BingoTeam (var name: String, var leader: BingoPlayer) {
         rightObjective.getScore("§3§olost.yt").score = 0
 
         team.prefix = "§7[§f$name§7]§f"
-        /*
-        * Bingo
-        *10
-        *9 1.Team
-        *8 Teamname
-        *7
-        *6 Nächstes Team:
-        *5 Teamname
-        *4
-        *3 Dein Team:
-        *2 Teamname
-        *1
-        *0 lost.yt
-        */
+
         val firstPlace = rightScoreboard.registerNewTeam("first")
         firstPlace.addEntry(ChatColor.BLUE.toString() + "" + ChatColor.RED)
         rightObjective.getScore(ChatColor.BLUE.toString() + "" + ChatColor.RED).score = 8
