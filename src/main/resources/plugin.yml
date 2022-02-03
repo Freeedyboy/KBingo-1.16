@@ -23,3 +23,5 @@ commands:
     description: top
   leaveteam:
     description: leave
+  tomate:
+    description:
