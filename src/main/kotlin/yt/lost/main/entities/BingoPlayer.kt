@@ -4,12 +4,17 @@ import org.bukkit.entity.Player
 
 class BingoPlayer (private var player: Player){
 
+    //stats
     private var kills:Int = 0
     private var itemsCollected:Int = 0
+    private var damageTaken: Double = 0.0
+    private var damageCaused: Double = 0.0
+
     private var team: BingoTeam? = null
 
-    fun onKill(){
-        this.kills += 1
+
+    fun onRoundEnd(){
+        
     }
 
     fun getName(): String{
@@ -26,6 +31,18 @@ class BingoPlayer (private var player: Player){
 
     fun hasTeam(): Boolean{
         return team != null
+    }
+
+    fun onDamageCaused(damage: Double){
+        this.damageCaused += damage
+    }
+
+    fun onDamageTaken(damage: Double){
+        this.damageTaken += damage
+    }
+
+    fun onKill(){
+        this.kills += 1
     }
 
     fun onItemCollected(){
@@ -47,5 +64,4 @@ class BingoPlayer (private var player: Player){
     fun getItemsCollected():Int{
         return this.itemsCollected
     }
-
 }

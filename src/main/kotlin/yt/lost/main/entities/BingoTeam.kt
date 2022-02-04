@@ -162,4 +162,10 @@ class BingoTeam (var name: String, var leader: BingoPlayer) {
             true
         }
     }
+
+    fun message(message: String){
+        for(player in member){
+            player.sendMessage(message)
+        }
+    }
 }

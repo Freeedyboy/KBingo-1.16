@@ -44,11 +44,11 @@ open class Events(private val game: RunningGame): Listener {
            event.isCancelled = true
         }else{
             event.isCancelled = false
-            if(event.cause.name.contains("ENTITY") )
+            if(event.cause.name.contains("ENTITY") || event.cause.name.contains("ARROW"))
                 return
 
             if(event.entity is Player) {
-                Bukkit.broadcastMessage("§9§lBingo §r§7| §7" + "Der Spieler §9${(event.entity as Player).name} §7hat gerade §4${event.finalDamage/2}♥ §7von §c${event.cause.name}§7 bekommen")
+                game.getPlayer(event.entity as Player)!!.getTeam()!!.message("§9§lBingo §r§7| §7" + "Der Spieler §9${(event.entity as Player).name} §7hat gerade §4${event.finalDamage/2}♥ §7von §c${event.cause.name}§7 bekommen")
             }
         }
     }
@@ -60,9 +60,9 @@ open class Events(private val game: RunningGame): Listener {
         }else{
             event.isCancelled = false
             if(event.entity is Player) {
-                Bukkit.broadcastMessage("§9§lBingo §r§7| §7" + "Der Spieler §9${(event.entity as Player).name} §7hat gerade §4${event.finalDamage /2.0}♥ §7von §c${(event.damager).name}§7 bekommen")
+                game.getPlayer(event.entity as Player)!!.getTeam()!!.message("§9§lBingo §r§7| §7" + "Der Spieler §9${(event.entity as Player).name} §7hat gerade §4${event.finalDamage/2}♥ §7von §c${event.cause.name}§7 bekommen")
             }else{
-                Bukkit.broadcastMessage("§9§lBingo §r§7| §7" + "Der Spieler §9${(event.entity as Player).name} §7hat gerade §4${event.finalDamage /2.0}♥ §7von §c${event.damager.name}§7 bekommen")
+                game.getPlayer(event.entity as Player)!!.getTeam()!!.message("§9§lBingo §r§7| §7" + "Der Spieler §9${(event.entity as Player).name} §7hat gerade §4${event.finalDamage/2}♥ §7von §c${event.cause.name}§7 bekommen")
             }
         }
     }

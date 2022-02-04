@@ -23,11 +23,11 @@ open class StartStopCommand(private val runningGame: RunningGame): CommandExecut
             else
                 runningGame.startGame()
         }else if(p1.name == "stopgame"){
-            if(runningGame.isRunning()){
+            if(runningGame.isRunning())
                runningGame.stopGame()
-            }else{
+            else
                 player.sendMessage("§9§lBingo §r§7| §c"+"Es läuft gerade kein Spiel")
-            }
+
         }
         return true
     }
