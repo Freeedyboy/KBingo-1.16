@@ -37,6 +37,7 @@ class RunningGame(private val plugin: Plugin) {
             for(team in teams){
                 team.reloadSB(plugin, firstPlace!!, getNext(team), team)
             }
+            updateSB()
         }
     }
 

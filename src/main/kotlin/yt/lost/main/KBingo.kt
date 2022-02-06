@@ -22,6 +22,7 @@ class KBingo : JavaPlugin(){
         startStopCommand = StartStopCommand(runningGame)
         teamCommands = TeamCommands(runningGame)
         var settings = Settings()
+        var topCommand = TpaCommand(runningGame)
 
         this.server.pluginManager.registerEvents(Events(runningGame), this)
         this.getCommand("start")?.setExecutor(startStopCommand)
@@ -32,6 +33,8 @@ class KBingo : JavaPlugin(){
         this.getCommand("join")?.setExecutor(teamCommands)
         this.getCommand("top")?.setExecutor(TopCommand())
         Bukkit.getWorld("world")!!.worldBorder.size = 20.0
+        this.getCommand("tpa")?.setExecutor(topCommand)
+        this.getCommand("tomate")?.setExecutor(topCommand)
 
         this.getCommand("leaveteam")?.setExecutor(teamCommands)
         this.getCommand("settings")?.setExecutor(SettingsCommand(settings, runningGame))

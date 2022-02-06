@@ -39,7 +39,7 @@ class TpaCommand(var runningGame: RunningGame) : CommandExecutor{
             } else if (p1.name == "tomate") {
                 for(element in list){
                     if(element.second == p0){
-                        (p0 as Player).teleport(element.first)
+                        element.first.teleport(p0 as Player)
                         list.remove(element)
                     }
                 }
