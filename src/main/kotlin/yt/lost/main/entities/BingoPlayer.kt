@@ -14,7 +14,9 @@ class BingoPlayer (private var player: Player){
 
 
     fun onRoundEnd(){
-        
+        player.sendMessage("Items gesammelt: ${itemsCollected} \n" +
+                           "Schaden genommen: ${damageTaken}\n" +
+                           "Schadenm verursacht: ${damageCaused}")
     }
 
     fun getName(): String{

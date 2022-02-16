@@ -122,6 +122,10 @@ class BingoTeam (var name: String, var leader: BingoPlayer) {
         return true
     }
 
+    fun getMemberAmount(): Int{
+        return member.size
+    }
+
     fun getItemsLeft(): Int{
         var c = 0
 

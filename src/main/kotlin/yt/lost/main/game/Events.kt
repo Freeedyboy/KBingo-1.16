@@ -15,13 +15,20 @@ import org.bukkit.event.inventory.InventoryDragEvent
 import org.bukkit.event.inventory.InventoryInteractEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerPickupItemEvent
+import yt.lost.main.configuration.Settings
 
-open class Events(private val game: RunningGame): Listener {
+open class Events(private val game: RunningGame, private val settings: Settings): Listener {
 
     @EventHandler
     fun onPlayerJoin(event: PlayerJoinEvent){
         event.joinMessage = "§9§lBingo §r§7| §8"+event.player.name+" ist Bingo gejoined"
-        game.addPlayer(event.player)
+        if(game.getPlayer(event.player) == null)
+            game.addPlayer(event.player)
+        else{
+            if(game.getPlayer(event.player)!!.hasTeam()){
+                event.player.sendMessage("Du bist in dem Team ${game.getPlayer(event.player)!!.getTeam()!!.team}")
+            }
+        }
         event.player.teleport(event.player.world.spawnLocation)
     }
 
@@ -60,6 +67,9 @@ open class Events(private val game: RunningGame): Listener {
         }else{
             event.isCancelled = false
             if(event.entity is Player) {
+                if(!settings.ffOn && game.getPlayer(event.damager as Player)!!.getTeam() == game.getPlayer(event.entity as Player)!!.getTeam()){
+                    event.isCancelled
+                }
                 game.getPlayer(event.entity as Player)!!.getTeam()!!.message("§9§lBingo §r§7| §7" + "Der Spieler §9${(event.entity as Player).name} §7hat gerade §4${event.finalDamage/2}♥ §7von §c${event.cause.name}§7 bekommen")
             }else{
                 game.getPlayer(event.entity as Player)!!.getTeam()!!.message("§9§lBingo §r§7| §7" + "Der Spieler §9${(event.entity as Player).name} §7hat gerade §4${event.finalDamage/2}♥ §7von §c${event.cause.name}§7 bekommen")

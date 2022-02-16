@@ -80,6 +80,27 @@ class RunningGame(private val plugin: Plugin) {
         return players.get(player)
     }
 
+    fun getSmallestTeam(): BingoTeam{
+        var small = teams.first
+
+        for(team in teams){
+            if(team.getMemberAmount() < small.getMemberAmount()){
+                small = team
+            }
+        }
+        return small
+    }
+
+    fun autofill(){
+        for(player in players.keys){
+            if(!players.get(player)!!.hasTeam()){
+                val team = getSmallestTeam()
+                team.addMember(getPlayer(player)!!)
+                player.sendMessage("Du bist durch autofill dem Team ${team.name} beigetreten")
+            }
+        }
+    }
+
     fun startGame(){
         for(i in 0 until 5){
             for(player in Bukkit.getOnlinePlayers()) {
@@ -87,6 +108,8 @@ class RunningGame(private val plugin: Plugin) {
             }
             Thread.sleep(1000)
         }
+
+        autofill()
 
         runnable.runTaskTimer(this.plugin, 1, 20)
         running = true
@@ -113,6 +136,7 @@ class RunningGame(private val plugin: Plugin) {
                 player.sendTitle("§a§lBingo", "§awurde von §9${team.name} §agewonnen", 1, 60, 1)
                 player.teleport(team.leader.getPlayer().location)
                 player.playSound(team.leader.getPlayer().location, Sound.ENTITY_PLAYER_LEVELUP, 5f, 5f)
+                getPlayer(player)!!.onRoundEnd()
             }
             for(teamm in teams){
                 teamm.reloadSB(plugin, firstPlace!!, getNext(teamm), teamm)
