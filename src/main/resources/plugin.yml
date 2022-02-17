@@ -27,3 +27,5 @@ commands:
     description: aosidjh
   tpa:
       description: pasokdop
+  jumpandrun:
+      description: make a jump and run

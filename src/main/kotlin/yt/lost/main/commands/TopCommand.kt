@@ -1,5 +1,6 @@
 package yt.lost.main.commands
 
+import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.command.Command
@@ -9,6 +10,11 @@ import org.bukkit.entity.Player
 
 class TopCommand: CommandExecutor {
     override fun onCommand(p0: CommandSender, p1: Command, p2: String, p3: Array<out String>): Boolean {
+        if((p0 as Player).world.name == "world_nether"){
+            (p0 as Player).teleport(Location(Bukkit.getWorld("world"), (p0 as Player).location.x * 8, (p0 as Player).location.y * 8, (p0 as Player).location.z * 8))
+            return true
+        }
+
         (p0 as Player).teleport(
             Location(
                 p0.world,

@@ -1,6 +1,8 @@
 package yt.lost.main.game
 
 import org.bukkit.Bukkit
+import org.bukkit.Location
+import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -29,7 +31,7 @@ open class Events(private val game: RunningGame, private val settings: Settings)
                 event.player.sendMessage("Du bist in dem Team ${game.getPlayer(event.player)!!.getTeam()!!.team}")
             }
         }
-        event.player.teleport(event.player.world.spawnLocation)
+        event.player.teleport(Location(Bukkit.getWorld("world"),0.0, topCommand(event.player, event.player.location.y)+2, 0.0))
     }
 
     @EventHandler
@@ -118,5 +120,19 @@ open class Events(private val game: RunningGame, private val settings: Settings)
         if(!game.running){
             event.isCancelled = true
         }
+    }
+
+    fun topCommand(playerToTeleport: Player, yCoord: Double): Double {
+        return if (Location(
+                playerToTeleport.location.world,
+                playerToTeleport.location.x,
+                yCoord.toDouble(),
+                playerToTeleport.location.z
+            )
+                .block
+                .blockData
+                .material
+            == Material.AIR
+        ) yCoord else topCommand(playerToTeleport, yCoord + 1)
     }
 }
