@@ -29,3 +29,5 @@ commands:
       description: pasokdop
   jumpandrun:
       description: make a jump and run
+  team:
+      description: list team stats

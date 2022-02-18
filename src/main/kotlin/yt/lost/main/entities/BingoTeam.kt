@@ -1,18 +1,15 @@
 package yt.lost.main.entities
 
 import CreateItemCommand.createGuiItem
-import org.bukkit.Bukkit
-import org.bukkit.ChatColor
-import org.bukkit.Material
-import org.bukkit.OfflinePlayer
+import org.bukkit.*
+import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryType
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.SkullMeta
 import org.bukkit.plugin.Plugin
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scoreboard.DisplaySlot
-import org.bukkit.scoreboard.Objective
-import org.bukkit.scoreboard.Scoreboard
 import org.bukkit.scoreboard.Team
 import java.util.*
 
@@ -24,10 +21,12 @@ class BingoTeam (var name: String, var leader: BingoPlayer) {
     private var itemsToGet: LinkedList<ItemStack> = LinkedList()
     var backpack: Inventory = Bukkit.createInventory(null, InventoryType.BARREL, "Backpack $name")
     var inventory: Inventory = Bukkit.createInventory(null, 9, "Items $name:")
+    val teamList: Inventory = Bukkit.createInventory(null, InventoryType.BARREL, "Team $name")
 
     private var rightScoreboard = Bukkit.getScoreboardManager()!!.newScoreboard
     private var rightObjective = rightScoreboard.registerNewObjective("Main2", "Main2", "§2§lBingo")
     var team: Team = rightScoreboard.registerNewTeam(name)
+
 
     init{
         member.add(leader)
@@ -52,15 +51,16 @@ class BingoTeam (var name: String, var leader: BingoPlayer) {
         firstPlace.addEntry(ChatColor.BLUE.toString() + "" + ChatColor.RED)
         rightObjective.getScore(ChatColor.BLUE.toString() + "" + ChatColor.RED).score = 8
 
-
         val nextTeam = rightScoreboard.registerNewTeam("next")
         nextTeam.addEntry(ChatColor.BLACK.toString() + "" + ChatColor.RED)
         rightObjective.getScore(ChatColor.BLACK.toString() + "" + ChatColor.RED).score = 5
 
-
         val yourTeam = rightScoreboard.registerNewTeam("your")
         yourTeam.addEntry(ChatColor.AQUA.toString() + "" + ChatColor.RED)
         rightObjective.getScore(ChatColor.AQUA.toString() + "" + ChatColor.RED).score = 2
+
+
+
     }
 
     fun reloadSB(plugin: Plugin, first: BingoTeam, next: BingoTeam, your: BingoTeam){
@@ -100,6 +100,26 @@ class BingoTeam (var name: String, var leader: BingoPlayer) {
             c += 1
         }
         return false
+    }
+
+    fun openTeamList(player: BingoPlayer){
+        var c = 0
+        teamList.setItem(0, getPlayerSkull(leader.getPlayer(), "§7Status: §6Leader",
+                                                                     "§7Items gesammelt: §9${leader.getItemsCollected()}",
+                                                                     "§7Schaden genommen: §c${leader.getDamageTaken()}",
+                                                                     "§7Schaden ausgeteilt: §a${leader.getDamageCaused()}",
+                                                                     "§7Kills: §4${leader.getKills()}"))
+
+        for(p in member){
+            if(p != leader){
+                teamList.setItem(9+c, getPlayerSkull(p.getPlayer(), "§7Status: §fMitglied",
+                                                                          "§7Items gesammelt: §9${leader.getItemsCollected()}",
+                                                                          "§7Schaden genommen: §4${leader.getDamageTaken()}",
+                                                                          "§7Schaden ausgeteilt: §a${leader.getDamageCaused()}",
+                                                                          "§7Kills: §4${leader.getKills()}"))
+            }
+        }
+        player.getPlayer().openInventory(teamList)
     }
 
     private fun reloadItems(){
@@ -171,5 +191,18 @@ class BingoTeam (var name: String, var leader: BingoPlayer) {
         for(player in member){
             player.sendMessage(message)
         }
+    }
+
+    private fun getPlayerSkull(player: Player, vararg lore: String): ItemStack? {
+        val skull = ItemStack(
+            Material.LEGACY_SKULL_ITEM, 1,
+            SkullType.PLAYER.ordinal.toShort()
+        )
+        val meta = skull.itemMeta as SkullMeta?
+        meta!!.owner = player.name
+        meta.setDisplayName(ChatColor.GOLD.toString() + "§l" + player.name)
+        meta.lore = listOf(*lore)
+        skull.itemMeta = meta
+        return skull
     }
 }

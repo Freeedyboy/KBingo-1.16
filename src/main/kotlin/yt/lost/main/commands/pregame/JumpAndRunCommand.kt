@@ -9,6 +9,7 @@ import yt.lost.main.KBingo
 import yt.lost.main.game.RunningGame
 import yt.lost.main.game.pregame.JumpAndRun
 import java.util.*
+import kotlin.math.roundToInt
 
 class JumpAndRunCommand(private val plugin: KBingo, private val runningGame: RunningGame): CommandExecutor {
 
@@ -24,7 +25,7 @@ class JumpAndRunCommand(private val plugin: KBingo, private val runningGame: Run
                 }
             }
 
-            val tmp = JumpAndRun((p0 as Player), Math.random() * 100 + 100)
+            val tmp = JumpAndRun((p0 as Player), (Math.random() * 100 + 100).roundToInt()+0.5.toDouble())
             jr.add(tmp)
             plugin.server.pluginManager.registerEvents(tmp, plugin)
         }

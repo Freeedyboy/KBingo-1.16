@@ -34,7 +34,13 @@ class TeamCommands(private val runningGame: RunningGame): CommandExecutor, TabCo
             if(runningGame.getPlayer(p0 as Player)?.hasTeam() == false) {
                 runningGame.getTeam(p3[0])?.removeMember(runningGame.getPlayer(p0 as Player)!!)
                 runningGame.getPlayer(p0 as Player)!!.setTeam(null)
-                p0.sendMessage("erfolgreich das Team verlassen")
+                p0.sendMessage("Erfolgreich das Team verlassen")
+            }
+        }else if(p1.name == "team"){
+            if(runningGame.getPlayer(p0 as Player)?.hasTeam() == true){
+                runningGame.getPlayer(p0 as Player)?.getTeam()!!.openTeamList(runningGame.getPlayer(p0 as Player)!!)
+            }else{
+                (p0 as Player).sendMessage("Du bist in keinem Team drin")
             }
         }
 

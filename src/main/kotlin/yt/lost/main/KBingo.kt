@@ -41,6 +41,7 @@ class KBingo : JavaPlugin(){
         this.getCommand("leaveteam")?.setExecutor(teamCommands)
         this.getCommand("settings")?.setExecutor(SettingsCommand(settings, runningGame))
         this.getCommand("jumpandrun")?.setExecutor(JumpAndRunCommand(this, runningGame))
+        this.getCommand("team")?.setExecutor(teamCommands)
 
         this.server.pluginManager.registerEvents(settings, this)
         this.server.pluginManager.registerEvents(Events(runningGame, settings), this)
