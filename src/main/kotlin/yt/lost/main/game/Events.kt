@@ -10,6 +10,7 @@ import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockPlaceEvent
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
+import org.bukkit.event.entity.FoodLevelChangeEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.inventory.CraftItemEvent
 import org.bukkit.event.inventory.InventoryClickEvent
@@ -44,6 +45,13 @@ open class Events(private val game: RunningGame, private val settings: Settings)
             if(game.getPlayer(event.player)!!.getTeam()!!.isWon()){
                 game.finishGame(game.getPlayer(event.player)?.getTeam()!!)
             }
+        }
+    }
+
+    @EventHandler
+    fun onHungerLoss(event: FoodLevelChangeEvent){
+        if(!game.running){
+            event.isCancelled = true
         }
     }
 

@@ -48,25 +48,8 @@ class KBingo : JavaPlugin(){
 
         Bukkit.getWorld("world")!!.worldBorder.size = 20.0
         Bukkit.getWorld("world")!!.worldBorder.center = Location(Bukkit.getWorld("world"),0.0, 0.0, 0.0)
-
-        buildSpawnArea()
     }
 
-    fun buildSpawnArea(){
-        val world = Bukkit.getWorld("world")!!
-
-        tmp()
-        val location = Location(Bukkit.getWorld("world"),0.0, topCommand(0.0, 0.0, 0.0)+1, 0.0)
-        location.block.type = Material.GOLD_BLOCK
-    }
-
-    fun tmp(){
-        for(num in array){
-            for(kp in array){
-                Location(Bukkit.getWorld("world"),num, topCommand(0.0, 0.0, 0.0)+1, kp).block.type = Material.ORANGE_CONCRETE
-            }
-        }
-    }
 
     fun topCommand(xCoord: Double, yCoord: Double, zCoord: Double): Double {
         return if (Location(

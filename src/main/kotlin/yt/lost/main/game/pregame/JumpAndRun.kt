@@ -25,7 +25,7 @@ class JumpAndRun(val player: Player, private val baseHeight: Double): Listener{
     init {
         baseLocation.block.type = Material.LIME_CONCRETE
         player.teleport(baseLocation.add(0.0, 1.0, 0.0))
-        blocks.add(baseLocation)
+        blocks.add(baseLocation.add(0.0, -1.0, 0.0))
         nextLocation = getNextLocation()
         setNextLocationBlock()
     }
@@ -36,9 +36,9 @@ class JumpAndRun(val player: Player, private val baseHeight: Double): Listener{
     }
 
     fun getNextLocation(): Location{
-        val location = Location(this.currentLocation.world, this.currentLocation.x.roundToInt().toDouble(), this.currentLocation.y.roundToInt().toDouble()+0.5, this.currentLocation.z.roundToInt().toDouble())
+        val location = Location(this.currentLocation.world, this.currentLocation.x.roundToInt().toDouble(), this.currentLocation.y.roundToInt().toDouble(), this.currentLocation.z.roundToInt().toDouble())
         if(Math.random() > 0.5) {
-            location.y = location.y - 0.5
+            location.y = location.y + 0.5
         }
 
         if(location.x > 0){
@@ -94,14 +94,14 @@ class JumpAndRun(val player: Player, private val baseHeight: Double): Listener{
     @EventHandler
     fun onPlayerMovement(event: PlayerMoveEvent){
         if(event.player == player){
-            if((event.to!!).distance(nextLocation) < 1.0 && nextLocation.y < event.to!!.y){
+            if((event.to!!).distance(nextLocation) <= 1.1 && nextLocation.y < event.to!!.y){
                 val tmp = nextLocation
                 this.lastLocation.block.type = Material.AIR
 
                 this.currentLocation = tmp
                 this.lastLocation = currentLocation
                 this.nextLocation = getNextLocation()
-                this.baseLocation.add(0.0, -1.0, 0.0).block.type = Material.AIR
+                this.baseLocation.block.type = Material.AIR
                 this.currentLocation.block.type = Material.LIME_CONCRETE
                 setNextLocationBlock()
                 this.player.playSound(player.location, Sound.ENTITY_PLAYER_LEVELUP, 5f, 5f)
