@@ -37,7 +37,6 @@ class RunningGame(private val plugin: Plugin) {
             for(team in teams){
                 team.reloadSB(plugin, firstPlace!!, getNext(team), team)
             }
-            updateSB()
         }
     }
 
@@ -159,7 +158,6 @@ class RunningGame(private val plugin: Plugin) {
 
             val tmp = globalScoreboard.createTeam(team.name)
             tmp.prefix = ChatComponentText(team.team.prefix)
-            tmp.color = EnumChatFormat.WHITE
             updateSB()
 
             true

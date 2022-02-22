@@ -32,7 +32,7 @@ open class Events(private val game: RunningGame, private val settings: Settings)
                 event.player.sendMessage("Du bist in dem Team ${game.getPlayer(event.player)!!.getTeam()!!.team}")
             }
         }
-        event.player.teleport(Location(Bukkit.getWorld("world"),0.0, topCommand(event.player, event.player.location.y)+2, 0.0))
+        event.player.teleport(Bukkit.getWorld("main")?.spawnLocation!!)
     }
 
     @EventHandler

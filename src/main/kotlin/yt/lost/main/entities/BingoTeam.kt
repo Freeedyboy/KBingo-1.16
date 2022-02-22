@@ -58,9 +58,6 @@ class BingoTeam (var name: String, var leader: BingoPlayer) {
         val yourTeam = rightScoreboard.registerNewTeam("your")
         yourTeam.addEntry(ChatColor.AQUA.toString() + "" + ChatColor.RED)
         rightObjective.getScore(ChatColor.AQUA.toString() + "" + ChatColor.RED).score = 2
-
-
-
     }
 
     fun reloadSB(plugin: Plugin, first: BingoTeam, next: BingoTeam, your: BingoTeam){
@@ -118,6 +115,7 @@ class BingoTeam (var name: String, var leader: BingoPlayer) {
                                                                           "§7Schaden ausgeteilt: §a${leader.getDamageCaused()}",
                                                                           "§7Kills: §4${leader.getKills()}"))
             }
+            c+=1
         }
         player.getPlayer().openInventory(teamList)
     }

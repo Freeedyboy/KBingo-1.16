@@ -21,7 +21,6 @@ class KBingo : JavaPlugin(){
     var runningGame: RunningGame = RunningGame(this)
     var startStopCommand: StartStopCommand? = null
     private var teamCommands: TeamCommands? = null
-    private var array = arrayOf(-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0)
 
     override fun onEnable() {
         startStopCommand = StartStopCommand(runningGame)
@@ -48,24 +47,5 @@ class KBingo : JavaPlugin(){
 
         Bukkit.getWorld("world")!!.worldBorder.size = 20.0
         Bukkit.getWorld("world")!!.worldBorder.center = Location(Bukkit.getWorld("world"),0.0, 0.0, 0.0)
-    }
-
-
-    fun topCommand(xCoord: Double, yCoord: Double, zCoord: Double): Double {
-        return if (Location(
-                Bukkit.getWorld("world"),
-                xCoord,
-                yCoord,
-                zCoord
-            )
-                .block
-                .blockData
-                .material
-            == Material.AIR
-        ) yCoord else topCommand(xCoord , yCoord + 1, zCoord)
-    }
-
-    fun addTeam(team: BingoTeam): Boolean{
-        return runningGame.addTeam(team)
     }
 }

@@ -14,7 +14,7 @@ open class CreateTeamCommand(private val plugin: KBingo, private val runningGame
         if(!plugin.runningGame.isRunning()){
             val team = BingoTeam(p3[0], runningGame.getPlayer(p0 as Player)!!)
             runningGame.getPlayer(p0 as Player)!!.setTeam(team)
-            if(plugin.addTeam(team)){
+            if(runningGame.addTeam(team)){
                 p0.sendMessage("§9§lBingo §r§7| §a"+"Das Team §9"+p3[0]+"§a wurde erfolgreich erstellt")
                 p0.playSound(p0.location, Sound.ENTITY_PLAYER_LEVELUP, 1f, 10f)
             }else{
