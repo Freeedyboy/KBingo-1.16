@@ -92,6 +92,7 @@ class BingoTeam (var name: String, var leader: BingoPlayer) {
                 array[c] = createGuiItem(Material.GREEN_STAINED_GLASS_PANE, "§9${currentItem.type.name} §ageschafft!", "§7Dieses Item musst du nun nicht mehr sammeln")
                 itemsToGet = LinkedList(array.asList())
                 reloadItems()
+                player.onItemCollected()
                 return true
             }
             c += 1

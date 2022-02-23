@@ -25,48 +25,46 @@ open class Events(private val game: RunningGame, private val settings: Settings)
     @EventHandler
     fun onPlayerJoin(event: PlayerJoinEvent){
         event.joinMessage = "§9§lBingo §r§7| §8"+event.player.name+" ist Bingo gejoined"
+        event.player.teleport(Bukkit.getWorld("main")?.spawnLocation!!)
+
         if(game.getPlayer(event.player) == null)
             game.addPlayer(event.player)
-        else{
-            if(game.getPlayer(event.player)!!.hasTeam()){
+        else
+            if(game.getPlayer(event.player)!!.hasTeam())
                 event.player.sendMessage("Du bist in dem Team ${game.getPlayer(event.player)!!.getTeam()!!.team}")
-            }
-        }
-        event.player.teleport(Bukkit.getWorld("main")?.spawnLocation!!)
     }
 
     @EventHandler
     fun onItemCollect(event: PlayerPickupItemEvent){
         if(game.running){
-            if(game.getPlayer(event.player)?.getTeam()?.onItemCollect(game.getPlayer(event.player)!!,event.item.itemStack) == true){
+            if(game.getPlayer(event.player)?.getTeam()?.onItemCollect(game.getPlayer(event.player)!!,event.item.itemStack) == true)
                 Bukkit.broadcastMessage("§9§lBingo §r§7| §8"+"§6${event.player.name} (${game.getPlayer(event.player)!!.getTeam()!!.name})§a hat §7${event.item.itemStack.type.name}§a aufgesammelt")
-            }
 
-            if(game.getPlayer(event.player)!!.getTeam()!!.isWon()){
+            if(game.getPlayer(event.player)!!.getTeam()!!.isWon())
                 game.finishGame(game.getPlayer(event.player)?.getTeam()!!)
-            }
         }
     }
 
     @EventHandler
     fun onHungerLoss(event: FoodLevelChangeEvent){
-        if(!game.running){
+        if(!game.running)
             event.isCancelled = true
-        }
+
     }
 
     @EventHandler
     fun onEntityDamage(event: EntityDamageEvent){
-        if(!game.running){
+        if(!game.running)
            event.isCancelled = true
-        }else{
+        else{
             event.isCancelled = false
             if(event.cause.name.contains("ENTITY") || event.cause.name.contains("ARROW"))
                 return
 
-            if(event.entity is Player) {
-                game.getPlayer(event.entity as Player)!!.getTeam()!!.message("§9§lBingo §r§7| §7" + "Der Spieler §9${(event.entity as Player).name} §7hat gerade §4${event.finalDamage/2}♥ §7von §c${event.cause.name}§7 bekommen")
-            }
+            if(event.entity is Player)
+                game.getPlayer(event.entity as Player)!!.getTeam()!!.message("§9§lBingo §r§7| §7" + "Der Spieler §9${(event.entity as Player).name} §7hat gerade §4${event.finalDamage / 2}♥ §7von §c${event.cause.name}§7 bekommen")
+
+            game.getPlayer(event.entity as Player)?.onDamageTaken(event.finalDamage)
         }
     }
 
@@ -77,13 +75,14 @@ open class Events(private val game: RunningGame, private val settings: Settings)
         }else{
             event.isCancelled = false
             if(event.entity is Player) {
-                if(!settings.ffOn && game.getPlayer(event.damager as Player)!!.getTeam() == game.getPlayer(event.entity as Player)!!.getTeam()){
+                if(!settings.ffOn && game.getPlayer(event.damager as Player)!!.getTeam() == game.getPlayer(event.entity as Player)!!.getTeam())
                     event.isCancelled
-                }
+
                 game.getPlayer(event.entity as Player)!!.getTeam()!!.message("§9§lBingo §r§7| §7" + "Der Spieler §9${(event.entity as Player).name} §7hat gerade §4${event.finalDamage/2}♥ §7von §c${event.cause.name}§7 bekommen")
-            }else{
+            }else
                 game.getPlayer(event.entity as Player)!!.getTeam()!!.message("§9§lBingo §r§7| §7" + "Der Spieler §9${(event.entity as Player).name} §7hat gerade §4${event.finalDamage/2}♥ §7von §c${event.cause.name}§7 bekommen")
-            }
+
+            game.getPlayer(event.damager as Player)!!.onDamageCaused(event.finalDamage)
         }
     }
 
