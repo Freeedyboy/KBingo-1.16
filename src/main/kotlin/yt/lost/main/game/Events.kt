@@ -14,13 +14,11 @@ import org.bukkit.event.entity.FoodLevelChangeEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.inventory.CraftItemEvent
 import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.event.inventory.InventoryDragEvent
-import org.bukkit.event.inventory.InventoryInteractEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerPickupItemEvent
 import yt.lost.main.configuration.Settings
 
-open class Events(private val game: RunningGame, private val settings: Settings): Listener {
+class Events(private val game: RunningGame, private val settings: Settings): Listener {
 
     @EventHandler
     fun onPlayerJoin(event: PlayerJoinEvent){
@@ -49,7 +47,6 @@ open class Events(private val game: RunningGame, private val settings: Settings)
     fun onHungerLoss(event: FoodLevelChangeEvent){
         if(!game.running)
             event.isCancelled = true
-
     }
 
     @EventHandler
@@ -89,44 +86,37 @@ open class Events(private val game: RunningGame, private val settings: Settings)
     @EventHandler
     fun inventoryChange(event: CraftItemEvent){
         if(game.running){
-            if(game.getPlayer(event.whoClicked as Player)?.getTeam()?.onItemCollect(game.getPlayer(event.whoClicked as Player)!!,event.currentItem!!) == true){
+            if(game.getPlayer(event.whoClicked as Player)?.getTeam()?.onItemCollect(game.getPlayer(event.whoClicked as Player)!!,event.currentItem!!) == true)
                 Bukkit.broadcastMessage("§9§lBingo §r§7| §8"+"§6${event.whoClicked.name} (${game.getPlayer(event.whoClicked as Player)!!.getTeam()!!.name})§a hat §7${event.currentItem!!.type.name}§a aufgesammelt")
-            }
 
-            if(game.getPlayer(event.whoClicked as Player)!!.getTeam()!!.isWon()){
+            if(game.getPlayer(event.whoClicked as Player)!!.getTeam()!!.isWon())
                 game.finishGame(game.getPlayer(event.whoClicked as Player)?.getTeam()!!)
-            }
         }
     }
 
     @EventHandler
     fun onInventoryClick(event: InventoryClickEvent){
-        for(team in game.teams){
-            if(event.inventory == team.inventory){
+        for(team in game.teams)
+            if(event.inventory == team.inventory)
                 event.isCancelled = true
-            }
-        }
     }
 
     @EventHandler
     fun onDeath(event: PlayerDeathEvent){
-        if(game.running){
+        if(game.running)
             event.deathMessage = "§9§lBingo §r§7| §8" +event.deathMessage
-        }
     }
 
     @EventHandler
     fun onBlockPlaced(event: BlockPlaceEvent){
-        if(!game.running){
+        if(!game.running)
             event.isCancelled = true
-        }
     }
 
     @EventHandler
     fun onBlockBreak(event: BlockBreakEvent){
-        if(!game.running){
+        if(!game.running)
             event.isCancelled = true
-        }
     }
 
     fun topCommand(playerToTeleport: Player, yCoord: Double): Double {

@@ -9,7 +9,7 @@ import yt.lost.main.KBingo
 import yt.lost.main.entities.BingoTeam
 import yt.lost.main.game.RunningGame
 
-open class CreateTeamCommand(private val plugin: KBingo, private val runningGame: RunningGame) : CommandExecutor{
+class CreateTeamCommand(private val plugin: KBingo, private val runningGame: RunningGame) : CommandExecutor{
     override fun onCommand(p0: CommandSender, p1: Command, p2: String, p3: Array<out String>): Boolean {
         if(!plugin.runningGame.isRunning()){
             val team = BingoTeam(p3[0], runningGame.getPlayer(p0 as Player)!!)

@@ -6,7 +6,7 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import yt.lost.main.game.RunningGame
 
-open class StartStopCommand(private val runningGame: RunningGame): CommandExecutor {
+class StartStopCommand(private val runningGame: RunningGame): CommandExecutor {
 
 
     override fun onCommand(p0: CommandSender, p1: Command, p2: String, p3: Array<out String>): Boolean {
