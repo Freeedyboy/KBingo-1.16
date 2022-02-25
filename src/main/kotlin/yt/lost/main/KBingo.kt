@@ -1,6 +1,7 @@
 package yt.lost.main
 
 import org.bukkit.Bukkit
+import org.bukkit.ChatColor
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -11,9 +12,7 @@ import yt.lost.main.configuration.Settings
 import yt.lost.main.entities.BingoTeam
 import yt.lost.main.game.Events
 import yt.lost.main.game.RunningGame
-import java.io.BufferedReader
-import java.io.File
-import java.io.IOException
+import java.io.*
 import java.util.*
 
 class KBingo : JavaPlugin(){
@@ -47,5 +46,25 @@ class KBingo : JavaPlugin(){
 
         Bukkit.getWorld("world")!!.worldBorder.size = 20.0
         Bukkit.getWorld("world")!!.worldBorder.center = Location(Bukkit.getWorld("world"),0.0, 0.0, 0.0)
+    }
+
+    override fun onDisable() {
+        for(player in Bukkit.getOnlinePlayers()){
+            bungeeCommand(player, "Lobby")
+        }
+    }
+
+    fun bungeeCommand(p: Player, sn: String) {
+        val b = ByteArrayOutputStream()
+        val d = DataOutputStream(b)
+        try {
+            d.writeUTF("Connect")
+            d.writeUTF(sn)
+            b.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            logger.severe(ChatColor.RED.toString() + "Error connecting to the server " + sn)
+        }
+        p.sendPluginMessage(this, "BungeeCord", b.toByteArray())
     }
 }
