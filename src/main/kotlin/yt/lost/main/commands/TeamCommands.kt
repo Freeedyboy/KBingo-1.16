@@ -21,8 +21,9 @@ class TeamCommands(private val runningGame: RunningGame): CommandExecutor, TabCo
         }else if(p1.name == "join"){
             if(runningGame.teams.size >= 2){
                 if(runningGame.getPlayer(p0 as Player)?.hasTeam() == false) {
-                    runningGame.getTeam(p3[0])?.addMember(runningGame.getPlayer(p0 as Player)!!)
                     runningGame.getPlayer(p0 as Player)!!.setTeam(runningGame.getTeam(p3[0])!!)
+                    runningGame.getTeam(p3[0])?.addMember(runningGame.getPlayer(p0 as Player)!!)
+                    runningGame.updateSB()
                     p0.sendMessage("Erfolgreich dem Team beigetreten")
                 }else
                     (p0 as Player).sendMessage("Du bist bereits in einem Team. Verlasse dieses zuerst")

@@ -11,7 +11,7 @@ class Items {
     var items: LinkedList<ItemStack> = LinkedList()
 
     fun mixItems(){
-        var i = 4
+        var i = 9
         while( i > 0){
             val item = ItemStack(Material.values()[Math.round(Math.random() * Material.values().size).toInt() - 1])
             val itemname = item.type.name

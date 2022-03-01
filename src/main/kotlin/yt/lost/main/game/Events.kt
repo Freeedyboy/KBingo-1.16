@@ -23,7 +23,7 @@ class Events(private val game: RunningGame, private val settings: Settings): Lis
     @EventHandler
     fun onPlayerJoin(event: PlayerJoinEvent){
         event.joinMessage = "§9§lBingo §r§7| §8"+event.player.name+" ist Bingo gejoined"
-        event.player.teleport(Bukkit.getWorld("main")?.spawnLocation!!)
+        event.player.teleport(Bukkit.getWorld("world")?.spawnLocation!!)
 
         if(game.getPlayer(event.player) == null)
             game.addPlayer(event.player)

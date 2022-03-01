@@ -95,6 +95,7 @@ class RunningGame(private val plugin: Plugin) {
             if(!players.get(player)!!.hasTeam()){
                 val team = getSmallestTeam()
                 team.addMember(getPlayer(player)!!)
+                players.get(player)!!.setTeam(team)
                 player.sendMessage("Du bist durch autofill dem Team ${team.name} beigetreten")
             }
         }
@@ -186,7 +187,7 @@ class RunningGame(private val plugin: Plugin) {
         return running
     }
 
-    private fun updateSB(){
+    fun updateSB(){
         for (player in Bukkit.getOnlinePlayers()) {
             try {
                 if (!globalScoreboard.getTeam(getPlayer(player)?.getTeam()?.name).playerNameSet.contains(player.name))
