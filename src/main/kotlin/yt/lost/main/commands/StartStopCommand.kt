@@ -10,7 +10,7 @@ class StartStopCommand(private val runningGame: RunningGame): CommandExecutor {
 
 
     override fun onCommand(p0: CommandSender, p1: Command, p2: String, p3: Array<out String>): Boolean {
-        var player: Player = p0 as Player
+        val player: Player = p0 as Player
 
         if(!player.isOp) {
             player.sendMessage("Du hast nicht die nötigen Berechtigungen")

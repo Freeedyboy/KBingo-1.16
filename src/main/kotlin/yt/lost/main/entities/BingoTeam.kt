@@ -1,6 +1,7 @@
 package yt.lost.main.entities
 
 import CreateItemCommand.createGuiItem
+import net.minecraft.server.v1_16_R3.EnumColor
 import org.bukkit.*
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryType
@@ -12,12 +13,14 @@ import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scoreboard.DisplaySlot
 import org.bukkit.scoreboard.Team
 import java.util.*
+import kotlin.math.roundToInt
 
 
 class BingoTeam (var name: String, var leader: BingoPlayer) {
 
     private val member: LinkedList<BingoPlayer> = LinkedList()
 
+    private val color: EnumColor = EnumColor.fromColorIndex((Math.random()*16).roundToInt())
     private var itemsToGet: LinkedList<ItemStack> = LinkedList()
     var backpack: Inventory = Bukkit.createInventory(null, InventoryType.BARREL, "Backpack $name")
     var inventory: Inventory = Bukkit.createInventory(null, 9, "Items $name:")
@@ -45,7 +48,7 @@ class BingoTeam (var name: String, var leader: BingoPlayer) {
         rightObjective.getScore("§a").score = 1
         rightObjective.getScore("§3§olost.yt").score = 0
 
-        team.prefix = "§7[§f$name§7]§f"
+        team.prefix = "§7[${color}${name}§7]§f"
 
         val firstPlace = rightScoreboard.registerNewTeam("first")
         firstPlace.addEntry(ChatColor.BLUE.toString() + "" + ChatColor.RED)

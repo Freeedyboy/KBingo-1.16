@@ -192,6 +192,7 @@ class RunningGame(private val plugin: Plugin) {
             try {
                 if (!globalScoreboard.getTeam(getPlayer(player)?.getTeam()?.name).playerNameSet.contains(player.name))
                     globalScoreboard.getTeam(getPlayer(player)?.getTeam()?.name).playerNameSet.add(player.name)
+
                 println("\n")
                 println("Spieler: "+getPlayer(player))
                 println("Team: "+getPlayer(player)?.getTeam())

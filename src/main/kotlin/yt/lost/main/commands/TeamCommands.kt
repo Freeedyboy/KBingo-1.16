@@ -19,7 +19,7 @@ class TeamCommands(private val runningGame: RunningGame): CommandExecutor, TabCo
                 (p0 as Player).openInventory(runningGame.getPlayer(p0 as Player)?.getTeam()?.inventory!!)
 
         }else if(p1.name == "join"){
-            if(runningGame.teams.size >= 2){
+            /*if(runningGame.teams.size >= 2){*/
                 if(runningGame.getPlayer(p0 as Player)?.hasTeam() == false) {
                     runningGame.getPlayer(p0 as Player)!!.setTeam(runningGame.getTeam(p3[0])!!)
                     runningGame.getTeam(p3[0])?.addMember(runningGame.getPlayer(p0 as Player)!!)
@@ -28,8 +28,8 @@ class TeamCommands(private val runningGame: RunningGame): CommandExecutor, TabCo
                 }else
                     (p0 as Player).sendMessage("Du bist bereits in einem Team. Verlasse dieses zuerst")
 
-            }else
-                p0.sendMessage("Es gibt zu wenig Teams")
+            /*}else
+                p0.sendMessage("Es gibt zu wenig Teams")*/
 
         }else if(p1.name == "leaveteam"){
             if(runningGame.getPlayer(p0 as Player)?.hasTeam() == false) {
