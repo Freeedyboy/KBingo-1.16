@@ -49,9 +49,7 @@ class KBingo : JavaPlugin(){
     }
 
     override fun onDisable() {
-        for(player in Bukkit.getOnlinePlayers()){
-            bungeeCommand(player, "Lobby")
-        }
+
     }
 
     fun bungeeCommand(p: Player, sn: String) {

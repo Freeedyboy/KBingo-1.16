@@ -190,7 +190,7 @@ class RunningGame(private val plugin: Plugin) {
     fun updateSB(){
         for (player in Bukkit.getOnlinePlayers()) {
             try {
-                if (!globalScoreboard.getTeam(getPlayer(player)?.getTeam()?.name).playerNameSet.contains(player.name))
+                if (!globalScoreboard.getTeam(getPlayer(player)?.getTeam()?.name)?.playerNameSet?.contains(player.name)!!)
                     globalScoreboard.getTeam(getPlayer(player)?.getTeam()?.name).playerNameSet.add(player.name)
 
                 println("\n")
@@ -199,9 +199,12 @@ class RunningGame(private val plugin: Plugin) {
                 println("Gleicher Name: "+getPlayer(player)?.getTeam()?.name)
                 println("PREFIX: "+globalScoreboard.getTeam(getPlayer(player)?.getTeam()?.name).prefix.text)
 
-                if(getPlayer(player)!!.hasTeam()){
+                if(getPlayer(player)?.hasTeam()!!){
+                    println("inif")
                     sendPacket(PacketPlayOutScoreboardTeam(globalScoreboard.getTeam(getPlayer(player)?.getTeam()?.name), 1))
+                    println("nach erstem")
                     sendPacket(PacketPlayOutScoreboardTeam(globalScoreboard.getTeam(getPlayer(player)?.getTeam()?.name), 0))
+                    println("hmmmmm")
                 }
             }catch (e: NullPointerException){
                 e.printStackTrace()

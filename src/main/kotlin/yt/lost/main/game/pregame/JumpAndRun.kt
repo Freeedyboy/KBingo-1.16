@@ -73,13 +73,18 @@ class JumpAndRun(val player: Player, private val baseHeight: Double): Listener{
         if(location.x > 9 || location.x < -9 || location.z > 9 || location.z < -9)
             return getNextLocation()
 
-        player.sendMessage("  ")
+        /*player.sendMessage("  ")
         player.sendMessage("increment x $val1")
         player.sendMessage("increment z $val2")
         player.sendMessage("x ${location.x}")
         player.sendMessage("y ${location.y}")
         player.sendMessage("z ${location.z}")
-        player.sendMessage("Hm ${baseLocation.block.type}")
+        player.sendMessage("Hm ${baseLocation.block.type}")*/
+
+        if(val1 == 4)
+            val1 = 3
+        else if (val2 == 4)
+            val2 = 3
 
         return location
     }
@@ -109,6 +114,7 @@ class JumpAndRun(val player: Player, private val baseHeight: Double): Listener{
             }else if(event.to!!.y < currentLocation.y-10){
                 removeAllBlocks()
                 //player.sendMessage("cl ${currentLocation.y}")
+                player.playSound(player.location, Sound.ENTITY_ITEM_BREAK, 1f, 1f)
                 player.sendMessage("Vorbei!\n" +
                                    "Du hast $jumps Jumps geschafft!\n" +
                                    "Um noch einmal zu spielen mach noch einmal /jumpandrun")

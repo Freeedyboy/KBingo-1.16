@@ -8,14 +8,12 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockPlaceEvent
-import org.bukkit.event.entity.EntityDamageByEntityEvent
-import org.bukkit.event.entity.EntityDamageEvent
-import org.bukkit.event.entity.FoodLevelChangeEvent
-import org.bukkit.event.entity.PlayerDeathEvent
+import org.bukkit.event.entity.*
 import org.bukkit.event.inventory.CraftItemEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerPickupItemEvent
+import org.bukkit.event.world.WorldEvent
 import yt.lost.main.configuration.Settings
 
 class Events(private val game: RunningGame, private val settings: Settings): Listener {
@@ -76,10 +74,9 @@ class Events(private val game: RunningGame, private val settings: Settings): Lis
                     event.isCancelled
 
                 game.getPlayer(event.entity as Player)!!.getTeam()!!.message("§9§lBingo §r§7| §7" + "Der Spieler §9${(event.entity as Player).name} §7hat gerade §4${event.finalDamage/2}♥ §7von §c${event.cause.name}§7 bekommen")
-            }else
-                game.getPlayer(event.entity as Player)!!.getTeam()!!.message("§9§lBingo §r§7| §7" + "Der Spieler §9${(event.entity as Player).name} §7hat gerade §4${event.finalDamage/2}♥ §7von §c${event.cause.name}§7 bekommen")
+            }
 
-            game.getPlayer(event.damager as Player)!!.onDamageCaused(event.finalDamage)
+            game.getPlayer(event.damager as Player)?.onDamageCaused(event.finalDamage)
         }
     }
 
@@ -119,17 +116,18 @@ class Events(private val game: RunningGame, private val settings: Settings): Lis
             event.isCancelled = true
     }
 
-    fun topCommand(playerToTeleport: Player, yCoord: Double): Double {
-        return if (Location(
-                playerToTeleport.location.world,
-                playerToTeleport.location.x,
-                yCoord.toDouble(),
-                playerToTeleport.location.z
-            )
-                .block
-                .blockData
-                .material
-            == Material.AIR
-        ) yCoord else topCommand(playerToTeleport, yCoord + 1)
+    /*@EventHandler
+    fun onDaylightChange(event: WorldEvent){
+        if(!game.running && event.world.fullTime > 10000)
+            event.world.fullTime = 9000
+    }
+    fuck spigot
+    */
+
+    @EventHandler
+    fun onEntityTarget(event: EntityTargetEvent){
+        if(!game.running && event.target is Player){
+            event.isCancelled = true
+        }
     }
 }
