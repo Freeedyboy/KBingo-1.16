@@ -9,9 +9,11 @@ import org.bukkit.entity.Player
 import org.bukkit.plugin.Plugin
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer
+import org.bukkit.scoreboard.DisplaySlot
+import org.bukkit.scoreboard.Objective
 import yt.lost.main.entities.BingoPlayer
 import yt.lost.main.entities.BingoTeam
-import java.sql.SQLException
+import org.bukkit.scoreboard.Scoreboard
 import java.util.*
 
 
@@ -19,7 +21,7 @@ class RunningGame(private val plugin: Plugin) {
 
     private var time: Int = 0
 
-    var globalScoreboard: Scoreboard = Scoreboard()
+    //var globalScoreboard = Scoreboard()
 
     var running: Boolean = false
     val players: HashMap<Player, BingoPlayer> = HashMap()
@@ -90,6 +92,14 @@ class RunningGame(private val plugin: Plugin) {
         return small
     }
 
+    fun setAllTablist(){
+        for(team in teams){
+            for(tmp in teams){
+                team.rightScoreboard.teams.add(tmp.team)
+            }
+        }
+    }
+
     fun autofill(){
         for(player in players.keys){
             if(!players.get(player)!!.hasTeam()){
@@ -156,10 +166,7 @@ class RunningGame(private val plugin: Plugin) {
     fun addTeam(team: BingoTeam): Boolean{
         return if(!teams.contains(team)){
             teams.add(team)
-
-            val tmp = globalScoreboard.createTeam(team.name)
-            tmp.prefix = ChatComponentText(team.team.prefix)
-            updateSB()
+            setAllTablist()
 
             true
         }else{
@@ -187,7 +194,7 @@ class RunningGame(private val plugin: Plugin) {
         return running
     }
 
-    fun updateSB(){
+    /*fun updateSB(){
         for (player in Bukkit.getOnlinePlayers()) {
             try {
                 if (!globalScoreboard.getTeam(getPlayer(player)?.getTeam()?.name)?.playerNameSet?.contains(player.name)!!)
@@ -210,7 +217,7 @@ class RunningGame(private val plugin: Plugin) {
                 e.printStackTrace()
             }
         }
-    }
+    }*/
 
     private fun sendPacket(packet: Packet<*>) {
         for (onlinePlayer in Bukkit.getOnlinePlayers()) {

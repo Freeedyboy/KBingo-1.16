@@ -23,7 +23,7 @@ class TeamCommands(private val runningGame: RunningGame): CommandExecutor, TabCo
                 if(runningGame.getPlayer(p0 as Player)?.hasTeam() == false) {
                     runningGame.getPlayer(p0 as Player)!!.setTeam(runningGame.getTeam(p3[0])!!)
                     runningGame.getTeam(p3[0])?.addMember(runningGame.getPlayer(p0 as Player)!!)
-                    runningGame.updateSB()
+                    //runningGame.updateSB()
                     p0.sendMessage("Erfolgreich dem Team beigetreten")
                 }else
                     (p0 as Player).sendMessage("Du bist bereits in einem Team. Verlasse dieses zuerst")

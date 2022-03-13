@@ -11,7 +11,9 @@ import org.bukkit.inventory.meta.SkullMeta
 import org.bukkit.plugin.Plugin
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scoreboard.DisplaySlot
+import org.bukkit.scoreboard.Scoreboard
 import org.bukkit.scoreboard.Team
+import yt.lost.main.game.RunningGame
 import java.util.*
 import kotlin.math.roundToInt
 
@@ -26,14 +28,15 @@ class BingoTeam (var name: String, var leader: BingoPlayer) {
     var inventory: Inventory = Bukkit.createInventory(null, 9, "Items $name:")
     val teamList: Inventory = Bukkit.createInventory(null, InventoryType.BARREL, "Team $name")
 
-    private var rightScoreboard = Bukkit.getScoreboardManager()!!.newScoreboard
+    var rightScoreboard = Bukkit.getScoreboardManager()!!.newScoreboard
     private var rightObjective = rightScoreboard.registerNewObjective("Main2", "Main2", "§2§lBingo")
     var team: Team = rightScoreboard.registerNewTeam(name)
-
 
     init{
         member.add(leader)
         leader.getPlayer().scoreboard = rightScoreboard
+
+
 
         rightObjective.displaySlot = DisplaySlot.SIDEBAR
         rightObjective.getScore("§f").score = 10
@@ -49,6 +52,7 @@ class BingoTeam (var name: String, var leader: BingoPlayer) {
         rightObjective.getScore("§3§olost.yt").score = 0
 
         team.prefix = "§7[${color}${name}§7]§f"
+        team.addPlayer(leader.getPlayer())
 
         val firstPlace = rightScoreboard.registerNewTeam("first")
         firstPlace.addEntry(ChatColor.BLUE.toString() + "" + ChatColor.RED)
@@ -102,6 +106,14 @@ class BingoTeam (var name: String, var leader: BingoPlayer) {
         }
         return false
     }
+
+    fun setScoreboard(scoreboard: Scoreboard){
+        for(member in member){
+            member.getPlayer().scoreboard = scoreboard
+        }
+    }
+
+
 
     fun openTeamList(player: BingoPlayer){
         var c = 0
@@ -171,6 +183,7 @@ class BingoTeam (var name: String, var leader: BingoPlayer) {
             false
         else{
             member.remove(player)
+            team.removePlayer(player.getPlayer())
             true
         }
     }
@@ -182,6 +195,7 @@ class BingoTeam (var name: String, var leader: BingoPlayer) {
             member.add(player)
             team.addPlayer(player.getPlayer())
             player.getPlayer().scoreboard = rightScoreboard
+            team.addPlayer(player.getPlayer())
             for(m in member){
                 m.sendMessage("Der Spieler ${player.getName()} ist eurem Team beigetreten")
             }
